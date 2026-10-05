@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>6-4 よくある悩み | ありがとうグループ講座</title>
+<style>:root{--bg:#fbf8f3;--fg:#2b2622;--muted:#6f655b;--card:#fff;--line:#e6ddd0;--accent:#c4692b;--accent-fg:#fff;--t1:#3c8a5a;--t2:#2f6fa8;--t3:#a5502e;--mark:#fff1c2}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1d1a17;--fg:#efe9e1;--muted:#a79d90;--card:#26221e;--line:#3a342e;--accent:#e08a4a;--accent-fg:#1d1a17;--t1:#6fc28f;--t2:#79b0e3;--t3:#e38b69;--mark:#4a3e14}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;line-height:1.85;font-size:17px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--card);font-weight:700}
+.top a{color:var(--fg);text-decoration:none}
+main{max-width:760px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:1.55rem;line-height:1.4;margin:.4em 0 .5em}
+h2{font-size:1.2rem;margin:1.6em 0 .6em;line-height:1.5}
+h3{font-size:1.02rem;margin:1.4em 0 .4em;color:var(--accent)}
+p{margin:.8em 0}
+a{color:var(--accent)}
+.lead{color:var(--muted)}
+.crumb{font-size:.85rem;color:var(--muted);margin:0}
+.crumb a{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 16px 14px;margin:18px 0}
+.card h2{margin-top:.8em}
+.hint{font-size:.85rem;color:var(--muted)}
+.msg{min-height:1.4em;font-size:.9rem;color:var(--accent)}
+input{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);width:100%;max-width:320px}
+button{font:inherit;font-weight:700;padding:10px 18px;border:0;border-radius:8px;background:var(--accent);color:var(--accent-fg);cursor:pointer}
+form{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px}
+form label{flex:1 1 220px;margin:0}
+#logout{background:transparent;color:var(--muted);border:1px solid var(--line);font-size:.8rem;padding:6px 10px}
+form label{display:block;font-size:.9rem;margin-bottom:6px}
+.lockbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 18px 18px;margin-top:12px}
+.need{margin:.6em 0}
+.legend{list-style:none;padding:0;margin:.4em 0}
+.legend li{margin:.4em 0}
+.tier{display:inline-block;font-size:.72rem;font-weight:700;color:#fff;border-radius:99px;padding:2px 10px;margin-left:8px;vertical-align:middle}
+.legend .tier{margin-left:0}
+.t1{background:var(--t1)}.t2{background:var(--t2)}.t3{background:var(--t3)}
+.howto{background:var(--mark);border-radius:10px;padding:10px 14px;font-size:.92rem}
+.chap{margin:26px 0;padding-top:4px;border-top:1px solid var(--line)}
+.chap h2{margin:.7em 0 .2em}
+.chap .lock{margin-left:6px;font-size:.9rem}
+.aim{color:var(--muted);font-size:.9rem;margin:.1em 0 .6em}
+.lessons{list-style:none;margin:0;padding:0}
+.lessons a{display:grid;grid-template-columns:3.2em 1fr;gap:0 8px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--card);color:var(--fg);text-decoration:none}
+.lid{font-weight:700;color:var(--accent);grid-row:1/3}
+.lm{font-size:.78rem;color:var(--muted)}
+.chap:not(.open) .lessons a{opacity:.78}
+.badges{margin:.2em 0 1em}
+.badge{display:inline-block;font-size:.75rem;border:1px solid var(--line);border-radius:99px;padding:1px 10px;margin-right:6px;color:var(--muted)}
+.layer-base{border-color:var(--t1);color:var(--t1)}.layer-deep{border-color:var(--t2);color:var(--t2)}
+.video{position:relative;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;margin:14px 0}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video.soon{display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;background:var(--card);border:1px dashed var(--line);color:var(--muted);aspect-ratio:auto;min-height:120px}
+.point{border-left:4px solid var(--accent)}
+.point ul{padding-left:1.2em}
+.script p{margin:.9em 0}
+mark.todo{background:var(--mark);color:inherit;border-radius:4px;padding:0 4px}
+blockquote{margin:1em 0;padding:.2em 1em;border-left:3px solid var(--line);color:var(--muted)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:36px;font-size:.9rem}
+.pager a{max-width:48%}
+</style></head>
+<body><header class="top"><a href="index.html">ありがとうグループ講座</a></header>
+<main id="app">
+  <div id="lock" class="lockbox">
+    <p class="crumb">第6章　お客様との関わり</p>
+    <h1>6-4 よくある悩み</h1>
+    <p class="need">この回を見られる人：<strong>オーナー（加盟オーナー）</strong></p>
+    <form id="pwform"><label>パスワード<input id="pw" type="password" autocomplete="off" required></label><button>開く</button></form>
+    <p id="msg" class="msg" role="status"></p>
+    <p class="hint">パスワードがわからないときは、ありがとうグループの本部に聞いてください。</p>
+  </div>
+  <div id="content" hidden></div>
+</main>
+<script type="application/json" id="payload">{"iter":600000,"salt":"Ajc28J1pOz27Zf90zjNYFw==","iv":"zNZu651gcYgiek6T","ct":"q0zXdHF4FYwpmQj4WtFlPZBftcOi4dVtWa44XIkB65yXeAQtps2RY2iTZcYCaeSsChpFZDGe4L2k7wkJXOrNIckGvt1BzgTfkjnM3dpDbiH7n27lfx1a1bykB3jPKo/mNx+yxsi7mXRY82eB5M+fk75PNtnlFxudaHZhZoJgyKRlZhJ4GeiGNq4HByLpi4E8H4fG1voSW0jSJP6kvYo45mrw2QxrcE1yr2yGlNlLnNvIIBaV+W2UAA5moWRCnokh6iRLEQGEPMGBVAsImwxPrUFiLlGL2aEeycwtVN4Rtc4+yxnxF/HRx6VKJWB5zNTFbFU2f62q+K4/FqWZLOqyWbFrzkmDBDkPhqp/sHwfSDmNj2zx5hGrisldfjp4h3oRqxb9Ua5C9daJjcOD3YcPrW/rhFQKtAQgzO516Ohf4Mr8kUBOW+7nj2OPSzJoxig0QkM0CH5X8fCTnwwYZmpwxGwZWPrq4anzYuXvdoFxgd2upAS/0bJsrHnbYcpwNHf6WTRO/gtE+j2ppGIDSQE62UK+WPlDEaHHKOcfDE8BtheQMNqFxO7vmgj/1kGJJtbNcrAjtx5idL4MVjfBLEsqUwRFRwkoZFNHBYeM3OqGbb1sXYuzU3nTMZcQrJq5Fra8lKqcbq5mLO7n9Ot10tW90tIRkhxicmjrVUzeelMzydFg4rk/FQgu9aonpkoY5A53dhE8L0dBR/Mz3Qe01bJnxPndS2ZH/pa9RURDOxYiLcht0PD92GOuoE1KOie5xDZPvxrXxCF7ovHab3Qsrsv7S0pIXLaROTs0TxfSU5C/e9xyoYhUTVeUdeqLJXxW1BvqLO2jF8327iC95i47akOHOMcEuLMCXvm1taLp2GPiKhtjVPMZOOJ74qjaWvC4A3X3bIZptr2MiDf5sC2QOoNvgseUxtqpqRL/Xg9i4h4qXu0S4hAyGnBdNrnAa06bIKntUI5h4j9xfjnQQSycrLXICiQOrGVaCgBpEBcu6kRg97KVpxBmURpKhSePY4jMhQZ8jQzJQvYCMExzMjopsNny/5ZywfToa/IbHDDUsZ1pVGpornB66we2ZKNkcb/Otg047SF57wC2eumO8do5F8VzpoF86318Ff5qeZ6+MlQpYN6hSUzUpm40HI4dsMe8xtBMxpt/HmxwzD6jJ9csR3THTOh/YZA7KxGR+rWIltSejDI06XbFNlv6U5zbmMunWQrKkPNzg9nY7VWJpitrbLXH7vXsjB7dhP7g28L00/5up0XQOETmojsGm+Z8EgZlVxiVfWzJaEOWp01NdeLajuLbhJWSxgjDMA3aJNeim9ANFDczPCrnzkqS9LmZB8I828ydWSAMpApZC4/B7UYaaaNc0RjJqRaQto3OtEW5jM8Sya1PcSuwcpXlcdEKr1mpDP1bNJ3ZXCMzsdPuM2++3Ce6w6AmkWe8Zl3iRoEZr2VtlYcMaaeUM9OFNaq/Ywlk5O1p2I/XbkaL7RB4pFrLlZS0uRMVB6u4YKc1V7JYazaf1d30ACy6vAWRqqAz6WUQyHGiGAmnlxpiw5TVR0e9F0O4n8MH9NHVc7Be/iRErZdpWN4n+52TjwVoJAq7RdWyvBMCheLyzb9VmpRH5Dx+pbQYl9cX3+1NiBiEQTSx+u7UiCI1gPFUVL8EwgWUHWDC85y44Jy5YadfXd8JtYfvP5ZvJCPUwDS1SEcNH7gOQKfqyMM9Ej37ryIRB8AXNAmv/E2C8d9gj18FL/W15uuzLyGwg2b8z+0EjvxJAT1OlInRce00BeHimALF5QgLv1SSppF+yLmfEnZ/RnJxpdh7iB5qGnJ1FCiY0GL1M+tXwsLYpELPmfGOioUD2td3pkSEatcg70tYCBL39iborNyBeeII5n5C5E67g5kPENMB+v70PgjSnJNIFGqpy8sUWb8b57H1XMxlzNjMZ2v+6CI1tQrVxuaHDz1gKps02IQn9FiBAIAoHNLIrpG93ybAhW0xtHBci+I3LshGO44Da0e5DHuPMoVS9+ZwrjCFrdxjiRrLx4A0aioHKNxO3f+yal9Bqwt+t3dV5ijndHDr8jJ4HpQUd9Vhxh4bBJPVhuX80/jnQusBNiXri15X3EP1AD9M47vfruPXckelDTpNJxgcNHgjCg4lBbDYwTY2iJYo7fkzXYDGNAHKiU/ttmIBfJSrCepuTVuM9vQOyPTG3yR8UcWkb/U1awAdTSI9fJnftekbviWog3nDhYO74tggrqSWLqVpYGWwWxhGeQiCtLDvVlIQVuis0//Mxe7sUpTViRpKyiPgHKlMtNmNYXezR6v7Hu1mnPdUC4I0h4VeFjjX0u0rzhBrMVvO6BZrmzoPdX7Hbuak7kdlVGtd1/LgoNyAodRCrDkH8P+6tbu8hstIRbCxu9cJKYNGX5cyv525AlkkbAiKp9/FufX/Iuux68nxdwumA/5YIoDbu/ttbky2U61IY6Wx7LdizDykSaInYgTdxSVkML1wzspamStdIK9pgLzB29wcExO2m2nU70yIiJxcYjSLM71dOrq997qrjImDEJ50cPtSu+8rmbLIaUY4/v3mQTHtmJhH9p/b43d/tVqXfxd0fm0oh4O9C6j7QzmvlkW5b++GtWCnMD3cw0m/qU0gMPobSqbmwSVycTphXV31JKMTw4bm3/3BglqpPqErPriW2ITvcSt8UCqULbRuv6FAnChS3CI/Vz1HLqNrr3INmiu+KnAeyP2o9UTvl4T5hbdPZNfzDE3zGEFNl4rNeSKLEByW5oQd6NoXZnAVbck18Iu1/mxZbovatQ66B7tbqWQ4FNnqzEeb20OBV8Plxaxs/prtVgQnQH3VEMZUoSle34Fco2M8OWgNCJkS3hXzV4zjxeeW8jwx0rlJX2BvYX3W4TaXxyZZB1hGQUupGEylx/cFyRUR9YWM5xEIgIQd9G7kjROVx7iUjRZZALkMVnSW7wOMFDM5PMLUJjq/isXuKK/OR4Ln5Rt5W4hJDChoG6CBCfscvW49notnBhV78n0EJUoDTfId/Rm5Ru3rFk/JxBRAd5g30EunjA61bmAvBNXATWLYBnbqAxPo79jOD7JpmfXgBAIoNJOziAmErxA01+8XOq0tx6yJoxqbei/MTOwWeVBn27bglz0bkJUMlC5nlmBh5IXuHTxWxaIcSlvDcYG8pZwRnjgIq9FzJwTUi2ul2nan/xLcN5LELnZwxyL528jYEr1blEBaiMIAy8S/tpbU0r7GfkuSqGNYPeYQ2AipRlxyFcW5y59wOHcP4fw3P8r9gYx0xbVyHplF1XqZPkckU10V28ZFguQN+QVy39CjFvqscSs7w5IhnzZSEQrG0sx3SVMvXyUPFoU0N+yYkqJ1KQmGTglsBbNTAzaw1Q5CzmAklOjfoct2iJbhfQLn/6F7hviIuFYJ5Pxe7C5xpGMOp2OrDCCXX/xw9UzXYPXu8FPkqH7kBmEw9JCXotZVAfV0M7Z2X268eFKWwj9yQk6sx3JfKl9za7XiijjoL7DmrcBI4QHCECCFxwZ9WvwV6psZqREE1029HQY+MO83ybxH5QQlYmWzhYmmYuxx4HmHfAtkNtL6RqWFSM+tB3a2+E+Or6V1mAkAcgLhM18fQpWTMkkpn4BCEqVvpwkPRYvE7Z/M5j7qyhn61Xq8MZF9Ww+j06LeyhtIfHDtyAYO+C9vCT44kOpJzr05soff1n1KMe7F1DvhkuxlxA0piI5hvkw55Wa49ik2BtyR/v0Fy8PqINriwv5Dng0XJYy7g7P+FTrUbbgMSoqwXFHBU+DHCOStyv7fnfvscxlIXxW/SuQhnnOPVDLEdKGmrOYs3zXpBsZiXwzW0jszYmknSBiLFf3dIPvUncQQrzwj/V052sCO2LNzAPQZjGml6WvoNFB33DbtFdO9rKa3WDGd0ycaGXa2zNl548j6ZevglOzytJQl/IJ8eJjdj+GWHLfQqBed+P2W3LOTJUvtLBrx7xNEXeZG+slnas+SAyjVG+kwk4bGsBggG09P8CHpOtIpQzPQ2fTbLPMS9//ATyU7psp3UWRfQUPuY+3OC1OFG0HJiB0D6nSMzY8QuBVJXljWZysaPPFbPhUjGA2ehCRWGEL9uq5b7Fviof0UuNKi38o1AoS3h7dUmHfXrwrXGYZUpK9tkD+v5Pgr8ysfHdeA79V8xgRIqKARWBf5RlTP0fdSUKunI1W+G3TxvSKSiua0Hs0SzCwJQoQsaX/S5Bx4IAcULev7d8/ZdSoKqbUY7YL1pcMX0QC0dlZzc+3xI5r77Q0yjO+/am+QS5bgFKhX6o5axuiv4tscnMHTPhqDSkI46AkFGeZhK4insXtTkcVTHN0DIQganw0NhgqYalGSbmRv9wa1sme/ekMbG57C0eqb08aivsAuqtNvmYK+bYznnG65kLBe62reSID950bUQcvHm2TjLC7bVpVNI24UfN6GBVjbd3+38mIltdPFh6UGjG09GekRrXaoLVMfBG7YQW8DYDmpkwMQnJc2sp/aBVfbV3jhZYsqaoipFqGLQen/nPrUs6OIiVV0Il28i5Zh1ktK3Bha2M8JnOaizgbjU7Gmek0bjyktSNxpJ0xUzTioLVxxcWeQIQPY5TfWRfyecOKo6L+Dh5WPLyMYOQdEy4VUkT7SYMk/gU41JtWLeTbzibIIv4MEjJ1WDnJzQAp/KVqNfsRR8rmZBDMaIflEZKsXG4R81k/7v0+b0cKjQl1JpxpwdLcZMbu1xerVE7GyAgIeXViY0LFDfkbxmVG1azXb7/zyBW4x1XQZTa5NkaV4odb7tXVsOao/GKyt7jc1cAIGf9I/rN4RhX+cqdLo6mtR4+lstHFZcenFkX+msCjYEgZocRxiIok15k8pXY5cRNTLCOt4z2su1dnU0J+Q/HGq4md5osic3O1Rkvy99vnHagkTqZXYUrrvgN9A/KUOG9kgiiP3zlUnJzevT7591HKEl9kg6u0mlBNVwaHNg8NnRsaMdwTa/wWsIBmT5HXbPt9XE9TjNBc513q0ffeX5zliur4xdgQhA7eEGg4aJcU81jc9syt6avMwwNvaQKwEzAPDtuTzxS1QZ77zE1CgNn/9Gjwit5oriGypE3uFIkMbZKLjUU1plCNrpwcXsgCSXI4MjCH87hVRUVP12t0rxbPBPgIZVDsr5+6csDDHp/VlTocYt/c3EQjjO0civwgEOWW5YNx0vJvkY6kSBrM9YJA7rRX0U2bV/DavZUCTL/G/pkxfARcMwAloHVGH9A9xPgjJKrDI4MnCSM1V14Lsxul0ieqU1uy6sBrIk31+8jR5A5zmhQbJAu7u2IJ2H1j2OBfSQvtcU0BsSJZ2Vrwwiz75Ro4Y34xDUzS6Uu+ebmJrCXgMEcFrh1n6l0OdrE6NPEvqP+3RSVUi446LyZpUpHE4ashuS4W0mTufIliQ+v6j6B50l2F2zLaj10ha1UWSS2pmqfpt4Mmvx0DiYQd5trL1JPz2XylPkXPhbfkK38GSnuHka2TwnuKAAO96w2AWvoH962fvpV0akLtquU+g8dgEaLOJhR75qomJ9W9SPEGMyWM6LMPenz6d5tSiLXeTwlBQFcfTIFlUhoqbQ36h8I339+JM7C89E7fZ9On+ltkcNyZGNm1NNfp/W7wZFfl78UzDtfql6O99Am8y5xS78OBNECcBGM5JySBWKzU9mcNifN0TiZSQDZaFd0n4IfBuZMKQqtB8y9+x/r+JoM8koTAUVt+8Y1c5p5L84smRpx/mJGlTFkV1jzvqkhJ9SjhpoxuHur0OsuY/dTgAU7ZWLPfNtCFNBEwaJVThRwXtdeBGGsGgP9HBIpNUbed2RKPYB6FM3AOSTw3X7fVLM71/0DmmS/Zo8EAypZN+GzIz6u6I/KUKUhl5TMmKkt/oeLnR4nJv8JIHPE14CftOh3Ii42gnynm+oqMDHbg/2uxvx2UMCbH03f/7/MnM/dFMfQNjj+pvHHmkwGfdHBI5ik8zV2aIqH5A1X0l0N/ozbd87TQM99JMGXTgMT6AG6KeQl7Q7nvraHCdbFxTTWRcrtzvzj6H0aC/uadUY2PchkyMuY+3gzbRrd5ZZ4C3upQ9sD2tBsNe8qJ0CL81I2bzbDpNNg0Czx1B7vrJQL6a6g++K8sPL/pTgdl7lP9qNcTaDR9baz3lFSO0JKayzZhNjVRF3AC1tjVL/Qcia46FL40XxNTfsvJ05QtmQ3VVHnTIviwHGnWAV4inSI68AOT6sNCgkvqBPHJXcNXe17kEPM6LTIBFBa4gvn4Sg0qDeYaKk4HrsrdD+nJBIrON0iV9mrCGrHlIsabxEsSyEf2NSDZWHvHFQ0AAvGN5ABovvXbnhO4TmfufuD5btGW0PeEZkSgeXkk961nyh/SKWhGHqgwSje4K/mZ9T2l1iwSb7VQIDozKjSv8urW6uprG97WRJznz2hV5a4TWINitr0LzgJWXSTlabJ0yUghZ9y2Hozxk/4+ia4mNz9hbQshOlmhYhJiXzSJExze0+SFNtCIuIXV0eUqWQwptSpAOrKsbqzrzYX6NTELT9kgYOxgyWIwTMwHXnPOIHg2DcLqQgKzDGAm7GDv1tAiDKIHCS8acfIrgPCfSnVu4Cn1KQ+gAAMSXp8/Vd3CVEFh42MjCqPufe+LxVLDP7KMLb7j/CN16js85ioYQyJnIXeFZ3DlXRFUEE1AHTUm8quO+b0MaqG7KcXN03fbtCMWkpy8HEaK75sSBoG0kD2ApxzZu3QU1P6N0MHbSsInqntFUmqoOXByQh+WE7fYW4Op4/0ksQV+zNsg/E62grvPgvE+3vrVb6R6Tas/m7Sc8F/gq","wraps":[{"iv":"FUpGGC+2qjdm+c1p","ct":"nKH2/M43U+qHu0qX81r10mxbO8h7sl1m+WvSOwTet88gxn7unaQmxz3mT3bD7/pJ"},{"iv":"pq2y134jr63+m6Iy","ct":"r56188nbpYjEHUHG4RRTEP/mOS9CyHkDnNbNucZ1DBPYpNj5/9unOUGCah+wgycC"}]}</script>
+<script>(function () {
+  var enc = new TextEncoder(), dec = new TextDecoder();
+  var KEY = 'akoza_pw';
+  function b64(s) { return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); }); }
+  function getPws() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } }
+  function savePw(pw) { try { var a = getPws().filter(function (x) { return x !== pw; }); a.unshift(pw); localStorage.setItem(KEY, JSON.stringify(a.slice(0, 5))); } catch (e) {} }
+  function clearPws() { try { localStorage.removeItem(KEY); } catch (e) {} }
+
+  async function derive(pw, salt, iter) {
+    var base = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64(salt), iterations: iter, hash: 'SHA-256' },
+      base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  }
+  // ページ本文を開く。パスワードが合えば本文(文字列)、違えば null
+  async function openPage(pw, d) {
+    var k = await derive(pw, d.salt, d.iter);
+    for (var i = 0; i < d.wraps.length; i++) {
+      try {
+        var raw = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(d.wraps[i].iv) }, k, b64(d.wraps[i].ct));
+        var ck = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
+        var pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(d.iv) }, ck, b64(d.ct));
+        return dec.decode(pt);
+      } catch (e) { /* 次の包みを試す */ }
+    }
+    return null;
+  }
+  // 段階の札を開く。合えば段階の番号、違えば 0
+  async function checkTier(pw, checks) {
+    var best = 0;
+    for (var i = 0; i < checks.length; i++) {
+      var c = checks[i];
+      try {
+        var k = await derive(pw, c.salt, c.iter);
+        var pt = dec.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(c.iv) }, k, b64(c.ct)));
+        if (pt === 'ok:' + c.tier) best = Math.max(best, c.tier);
+      } catch (e) {}
+    }
+    return best;
+  }
+
+  window.AkozaPage = function (payloadText) {
+    var d = JSON.parse(payloadText);
+    var form = document.getElementById('pwform'), input = document.getElementById('pw'), msg = document.getElementById('msg');
+    var lock = document.getElementById('lock'), content = document.getElementById('content');
+    function show(html) {
+      content.innerHTML = html; content.hidden = false; lock.hidden = true;
+      window.scrollTo(0, 0);
+    }
+    async function tryAll(list) {
+      for (var i = 0; i < list.length; i++) {
+        var r = await openPage(list[i], d);
+        if (r !== null) { savePw(list[i]); show(r); return true; }
+      }
+      return false;
+    }
+    tryAll(getPws());
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      msg.textContent = '確認しています…';
+      var ok = await tryAll([input.value.trim()]);
+      if (!ok) { msg.textContent = 'このパスワードでは開けません。段階が違うか、入力のまちがいかもしれません。'; }
+    });
+  };
+
+  window.AkozaIndex = function (checksText) {
+    var checks = JSON.parse(checksText);
+    var form = document.getElementById('pwform'), input = document.getElementById('pw'), msg = document.getElementById('msg');
+    var logout = document.getElementById('logout'), box = document.getElementById('loginbox');
+    function apply(tier) {
+      document.querySelectorAll('.chap').forEach(function (el) {
+        var need = Number(el.getAttribute('data-tier'));
+        var open = tier >= need;
+        el.classList.toggle('open', open);
+        el.querySelector('.lock').textContent = open ? '' : '🔒';
+      });
+      logout.hidden = tier === 0;
+      if (tier > 0) { msg.textContent = ''; }
+    }
+    async function tryAll(list) {
+      var best = 0;
+      for (var i = 0; i < list.length; i++) {
+        var t = await checkTier(list[i], checks);
+        if (t > 0) { savePw(list[i]); best = Math.max(best, t); }
+      }
+      return best;
+    }
+    tryAll(getPws()).then(apply);
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      msg.textContent = '確認しています…';
+      var pw = input.value.trim();
+      var t = await checkTier(pw, checks);
+      if (t > 0) { savePw(pw); input.value = ''; var all = await tryAll(getPws()); apply(all); msg.textContent = '開きました。見られる章に鍵がなくなっています。'; }
+      else { msg.textContent = 'このパスワードでは開けません。入力のまちがいかもしれません。'; }
+    });
+    logout.addEventListener('click', function () { clearPws(); apply(0); msg.textContent = 'ログアウトしました。'; });
+  };
+})();
+</script>
+<script>AkozaPage(document.getElementById('payload').textContent);</script></body></html>

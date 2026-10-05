@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ありがとうグループ講座 | ありがとうグループ講座</title>
+<style>:root{--bg:#fbf8f3;--fg:#2b2622;--muted:#6f655b;--card:#fff;--line:#e6ddd0;--accent:#c4692b;--accent-fg:#fff;--t1:#3c8a5a;--t2:#2f6fa8;--t3:#a5502e;--mark:#fff1c2}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1d1a17;--fg:#efe9e1;--muted:#a79d90;--card:#26221e;--line:#3a342e;--accent:#e08a4a;--accent-fg:#1d1a17;--t1:#6fc28f;--t2:#79b0e3;--t3:#e38b69;--mark:#4a3e14}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;line-height:1.85;font-size:17px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--card);font-weight:700}
+.top a{color:var(--fg);text-decoration:none}
+main{max-width:760px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:1.55rem;line-height:1.4;margin:.4em 0 .5em}
+h2{font-size:1.2rem;margin:1.6em 0 .6em;line-height:1.5}
+h3{font-size:1.02rem;margin:1.4em 0 .4em;color:var(--accent)}
+p{margin:.8em 0}
+a{color:var(--accent)}
+.lead{color:var(--muted)}
+.crumb{font-size:.85rem;color:var(--muted);margin:0}
+.crumb a{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 16px 14px;margin:18px 0}
+.card h2{margin-top:.8em}
+.hint{font-size:.85rem;color:var(--muted)}
+.msg{min-height:1.4em;font-size:.9rem;color:var(--accent)}
+input{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);width:100%;max-width:320px}
+button{font:inherit;font-weight:700;padding:10px 18px;border:0;border-radius:8px;background:var(--accent);color:var(--accent-fg);cursor:pointer}
+form{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px}
+form label{flex:1 1 220px;margin:0}
+#logout{background:transparent;color:var(--muted);border:1px solid var(--line);font-size:.8rem;padding:6px 10px}
+form label{display:block;font-size:.9rem;margin-bottom:6px}
+.lockbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 18px 18px;margin-top:12px}
+.need{margin:.6em 0}
+.legend{list-style:none;padding:0;margin:.4em 0}
+.legend li{margin:.4em 0}
+.tier{display:inline-block;font-size:.72rem;font-weight:700;color:#fff;border-radius:99px;padding:2px 10px;margin-left:8px;vertical-align:middle}
+.legend .tier{margin-left:0}
+.t1{background:var(--t1)}.t2{background:var(--t2)}.t3{background:var(--t3)}
+.howto{background:var(--mark);border-radius:10px;padding:10px 14px;font-size:.92rem}
+.chap{margin:26px 0;padding-top:4px;border-top:1px solid var(--line)}
+.chap h2{margin:.7em 0 .2em}
+.chap .lock{margin-left:6px;font-size:.9rem}
+.aim{color:var(--muted);font-size:.9rem;margin:.1em 0 .6em}
+.lessons{list-style:none;margin:0;padding:0}
+.lessons a{display:grid;grid-template-columns:3.2em 1fr;gap:0 8px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--card);color:var(--fg);text-decoration:none}
+.lid{font-weight:700;color:var(--accent);grid-row:1/3}
+.lm{font-size:.78rem;color:var(--muted)}
+.chap:not(.open) .lessons a{opacity:.78}
+.badges{margin:.2em 0 1em}
+.badge{display:inline-block;font-size:.75rem;border:1px solid var(--line);border-radius:99px;padding:1px 10px;margin-right:6px;color:var(--muted)}
+.layer-base{border-color:var(--t1);color:var(--t1)}.layer-deep{border-color:var(--t2);color:var(--t2)}
+.video{position:relative;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;margin:14px 0}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video.soon{display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;background:var(--card);border:1px dashed var(--line);color:var(--muted);aspect-ratio:auto;min-height:120px}
+.point{border-left:4px solid var(--accent)}
+.point ul{padding-left:1.2em}
+.script p{margin:.9em 0}
+mark.todo{background:var(--mark);color:inherit;border-radius:4px;padding:0 4px}
+blockquote{margin:1em 0;padding:.2em 1em;border-left:3px solid var(--line);color:var(--muted)}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:36px;font-size:.9rem}
+.pager a{max-width:48%}
+</style></head>
+<body><header class="top"><span>ありがとうグループ講座</span><button id="logout" hidden>ログアウト</button></header>
+<main id="app">
+  <h1>ありがとうグループ講座</h1>
+  <p class="lead">「ありがとう」を軸に、お客様・仲間・お金との関わりを整える、加盟店のための講座です。</p>
+  <section class="card" id="loginbox">
+    <h2>パスワードを入れる</h2>
+    <form id="pwform"><input id="pw" type="password" autocomplete="off" placeholder="パスワード" required><button>確認する</button></form>
+    <p id="msg" class="msg" role="status"></p>
+    <p class="hint">パスワードは段階ごとに違います。入れると、あなたが見られる回だけが開きます。</p>
+  </section>
+  <section class="card"><h2>見られる人の段階</h2><ul class="legend"><li><span class="tier t1">スタッフ</span> スタッフ以上（スタッフ・オーナー）</li><li><span class="tier t2">オーナー</span> オーナー（加盟オーナー）</li><li><span class="tier t3">月額オーナー</span> 月額ロイヤリティを払っているオーナー</li></ul>
+    <p class="hint">上の段階のパスワードは、下の段階の回も開けます。</p></section>
+  <p class="howto"><strong>基本の道</strong>は、全員が見る流れです（各章の「考え方」と「ワーク」）。<strong>深掘り</strong>は、時間のあるときに見る、たとえ話や悩みへの答えです。</p>
+  <section class="chap" data-tier="1"><h2>はじめに<span class="tier t1">スタッフ</span><span class="lock">🔒</span></h2><p class="aim">この講座の使い方</p><ul class="lessons"><li><a href="0-1.html"><span class="lid">0-1</span><span class="lt">導入　この講座は、何のためにあるのか</span><span class="lm">基本の道・5分</span></a></li></ul></section>
+<section class="chap" data-tier="1"><h2>第1章　すべては「ありがとう」から始まる<span class="tier t1">スタッフ</span><span class="lock">🔒</span></h2><p class="aim">うまくいかない原因を外に探す前に、自分の受け取り方に気づく。</p><ul class="lessons"><li><a href="1-1.html"><span class="lid">1-1</span><span class="lt">すべては「ありがとう」から始まる</span><span class="lm">基本の道・9分</span></a></li><li><a href="1-2.html"><span class="lid">1-2</span><span class="lt">たとえ話と現場の事例</span><span class="lm">深掘り・7分</span></a></li><li><a href="1-3.html"><span class="lid">1-3</span><span class="lt">ワーク　自分の「見ているもの」に気づく</span><span class="lm">基本の道・7分</span></a></li><li><a href="1-4.html"><span class="lid">1-4</span><span class="lt">よくある悩み</span><span class="lm">深掘り・5分</span></a></li></ul></section>
+<section class="chap" data-tier="1"><h2>第2章　出来事をジャッジしない<span class="tier t1">スタッフ</span><span class="lock">🔒</span></h2><p class="aim">事実と解釈を分けて受け止め、次の一手を選ぶ。</p><ul class="lessons"><li><a href="2-1.html"><span class="lid">2-1</span><span class="lt">出来事をジャッジしない</span><span class="lm">基本の道・8〜10分</span></a></li><li><a href="2-2.html"><span class="lid">2-2</span><span class="lt">たとえ話と現場の事例</span><span class="lm">深掘り・6〜8分</span></a></li><li><a href="2-3.html"><span class="lid">2-3</span><span class="lt">ワーク「事実」と「自分の解釈」を分けて書く</span><span class="lm">基本の道・5〜8分</span></a></li><li><a href="2-4.html"><span class="lid">2-4</span><span class="lt">よくある悩み</span><span class="lm">深掘り・5分</span></a></li></ul></section>
+<section class="chap" data-tier="1"><h2>第3章　感情を受け入れて、出し切る<span class="tier t1">スタッフ</span><span class="lock">🔒</span></h2><p class="aim">疲れ・焦りを押し込めず、いったん認めて整える。</p><ul class="lessons"><li><a href="3-1.html"><span class="lid">3-1</span><span class="lt">感情を受け入れて、出し切る(考え方)</span><span class="lm">基本の道・8〜10分</span></a></li><li><a href="3-2.html"><span class="lid">3-2</span><span class="lt">フィルターのたとえと、先輩オーナーの話</span><span class="lm">深掘り・6〜8分</span></a></li><li><a href="3-3.html"><span class="lid">3-3</span><span class="lt">現場でできる、気持ちの整えワーク</span><span class="lm">基本の道・5〜8分</span></a></li><li><a href="3-4.html"><span class="lid">3-4</span><span class="lt">気持ちの扱い方 よくある悩みQ&amp;A</span><span class="lm">深掘り・5分</span></a></li></ul></section>
+<section class="chap" data-tier="2"><h2>第4章　恐れを、安心と信頼へ<span class="tier t2">オーナー</span><span class="lock">🔒</span></h2><p class="aim">不安を言葉にして、いま打てる小さな手に置き換える。</p><ul class="lessons"><li><a href="4-1.html"><span class="lid">4-1</span><span class="lt">恐れを、安心と信頼へ ― 怖さの正体を言葉にする</span><span class="lm">基本の道・8〜10分</span></a></li><li><a href="4-2.html"><span class="lid">4-2</span><span class="lt">怖さは、道の途中の霧 ― たとえ話と現場の事例</span><span class="lm">深掘り・6〜8分</span></a></li><li><a href="4-3.html"><span class="lid">4-3</span><span class="lt">ワーク ― いちばん怖いことを書き出して、小さな一手を決める</span><span class="lm">基本の道・5〜8分</span></a></li><li><a href="4-4.html"><span class="lid">4-4</span><span class="lt">よくある悩み ― Q&amp;A</span><span class="lm">深掘り・約5分</span></a></li></ul></section>
+<section class="chap" data-tier="3"><h2>第5章　お金を、愛のめぐりとして扱う<span class="tier t3">月額オーナー</span><span class="lock">🔒</span></h2><p class="aim">お金と感謝の関係を見直し、巡る使い方を身につける。</p><ul class="lessons"><li><a href="5-1.html"><span class="lid">5-1</span><span class="lt">お金を、愛のめぐりとして見てみる</span><span class="lm">基本の道・8〜10分</span></a></li><li><a href="5-2.html"><span class="lid">5-2</span><span class="lt">たとえ話と現場の事例</span><span class="lm">深掘り・6〜8分</span></a></li><li><a href="5-3.html"><span class="lid">5-3</span><span class="lt">ワーク 「ありがとう」を添えて受け取る・払う</span><span class="lm">基本の道・5〜8分</span></a></li><li><a href="5-4.html"><span class="lid">5-4</span><span class="lt">よくある悩み</span><span class="lm">深掘り・約5分</span></a></li></ul></section>
+<section class="chap" data-tier="2"><h2>第6章　お客様との関わり<span class="tier t2">オーナー</span><span class="lock">🔒</span></h2><p class="aim">お客様の困りごとに先に気づく姿勢をつくる。</p><ul class="lessons"><li><a href="6-1.html"><span class="lid">6-1</span><span class="lt">「この人のために」が先にある</span><span class="lm">基本の道・8〜10分</span></a></li><li><a href="6-2.html"><span class="lid">6-2</span><span class="lt">たとえ話と現場の事例</span><span class="lm">深掘り・6〜8分</span></a></li><li><a href="6-3.html"><span class="lid">6-3</span><span class="lt">ワーク 訪問前に一言目を決める</span><span class="lm">基本の道・5〜8分</span></a></li><li><a href="6-4.html"><span class="lid">6-4</span><span class="lt">よくある悩み</span><span class="lm">深掘り・5分</span></a></li></ul></section>
+<section class="chap" data-tier="2"><h2>第7章　仲間との関わり<span class="tier t2">オーナー</span><span class="lock">🔒</span></h2><p class="aim">一人で抱え込まず、感謝を言葉にして助け合う。</p><ul class="lessons"><li><a href="7-1.html"><span class="lid">7-1</span><span class="lt">仲間との関わり:ひとりで抱えず、ゆるして、ありがとうを言葉にする</span><span class="lm">基本の道・8〜10分</span></a></li><li><a href="7-2.html"><span class="lid">7-2</span><span class="lt">たとえ話と現場の事例:荷物をひとりで持たない</span><span class="lm">深掘り・6〜8分</span></a></li><li><a href="7-3.html"><span class="lid">7-3</span><span class="lt">ワーク:今週お世話になった仲間に、ありがとうを1通送る</span><span class="lm">基本の道・5〜8分</span></a></li><li><a href="7-4.html"><span class="lid">7-4</span><span class="lt">よくある悩み:仲間との関わりのQ&amp;A</span><span class="lm">深掘り・約5分</span></a></li></ul></section>
+<section class="chap" data-tier="3"><h2>第8章　続ける仕組みと、これからの夢<span class="tier t3">月額オーナー</span><span class="lock">🔒</span></h2><p class="aim">小さく動き続け、来年の夢を仲間に宣言する。</p><ul class="lessons"><li><a href="8-1.html"><span class="lid">8-1</span><span class="lt">動けない日があっても、小さく続ける</span><span class="lm">基本の道・9分</span></a></li><li><a href="8-2.html"><span class="lid">8-2</span><span class="lt">階段・点・呼び水と、先輩オーナーの話</span><span class="lm">深掘り・7分</span></a></li><li><a href="8-3.html"><span class="lid">8-3</span><span class="lt">来年の夢と、今月やること</span><span class="lm">基本の道・7分</span></a></li><li><a href="8-4.html"><span class="lid">8-4</span><span class="lt">よくある悩み</span><span class="lm">深掘り・5分</span></a></li></ul></section>
+<section class="chap" data-tier="1"><h2>おわりに<span class="tier t1">スタッフ</span><span class="lock">🔒</span></h2><p class="aim">8章の振り返りと、次の一歩。</p><ul class="lessons"><li><a href="9-1.html"><span class="lid">9-1</span><span class="lt">まとめ　ここから、小さな一歩を</span><span class="lm">基本の道・5分</span></a></li></ul></section>
+</main>
+<script type="application/json" id="checks">[{"tier":1,"iter":600000,"salt":"2sRlSTKMKkOzo++tveIgqQ==","iv":"+wMcn/VRamwzOhwV","ct":"OqS4qhPPPjx1qjDBwCP5htbikXs="},{"tier":2,"iter":600000,"salt":"TVGUPkE3JCj3zf3nhGZxow==","iv":"i+LFV+wdSvBFUIZH","ct":"d8lJG71l/3AcQGZAlKiQVKB7wjY="},{"tier":3,"iter":600000,"salt":"RrwOPFC8uJ1/xWrmDLw7bA==","iv":"9wOQJsIFX6V7eUJ4","ct":"JpmfJGJzP/AYp8hAj+OG/Mev3fg="}]</script>
+<script>(function () {
+  var enc = new TextEncoder(), dec = new TextDecoder();
+  var KEY = 'akoza_pw';
+  function b64(s) { return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); }); }
+  function getPws() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } }
+  function savePw(pw) { try { var a = getPws().filter(function (x) { return x !== pw; }); a.unshift(pw); localStorage.setItem(KEY, JSON.stringify(a.slice(0, 5))); } catch (e) {} }
+  function clearPws() { try { localStorage.removeItem(KEY); } catch (e) {} }
+
+  async function derive(pw, salt, iter) {
+    var base = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64(salt), iterations: iter, hash: 'SHA-256' },
+      base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  }
+  // ページ本文を開く。パスワードが合えば本文(文字列)、違えば null
+  async function openPage(pw, d) {
+    var k = await derive(pw, d.salt, d.iter);
+    for (var i = 0; i < d.wraps.length; i++) {
+      try {
+        var raw = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(d.wraps[i].iv) }, k, b64(d.wraps[i].ct));
+        var ck = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
+        var pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(d.iv) }, ck, b64(d.ct));
+        return dec.decode(pt);
+      } catch (e) { /* 次の包みを試す */ }
+    }
+    return null;
+  }
+  // 段階の札を開く。合えば段階の番号、違えば 0
+  async function checkTier(pw, checks) {
+    var best = 0;
+    for (var i = 0; i < checks.length; i++) {
+      var c = checks[i];
+      try {
+        var k = await derive(pw, c.salt, c.iter);
+        var pt = dec.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(c.iv) }, k, b64(c.ct)));
+        if (pt === 'ok:' + c.tier) best = Math.max(best, c.tier);
+      } catch (e) {}
+    }
+    return best;
+  }
+
+  window.AkozaPage = function (payloadText) {
+    var d = JSON.parse(payloadText);
+    var form = document.getElementById('pwform'), input = document.getElementById('pw'), msg = document.getElementById('msg');
+    var lock = document.getElementById('lock'), content = document.getElementById('content');
+    function show(html) {
+      content.innerHTML = html; content.hidden = false; lock.hidden = true;
+      window.scrollTo(0, 0);
+    }
+    async function tryAll(list) {
+      for (var i = 0; i < list.length; i++) {
+        var r = await openPage(list[i], d);
+        if (r !== null) { savePw(list[i]); show(r); return true; }
+      }
+      return false;
+    }
+    tryAll(getPws());
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      msg.textContent = '確認しています…';
+      var ok = await tryAll([input.value.trim()]);
+      if (!ok) { msg.textContent = 'このパスワードでは開けません。段階が違うか、入力のまちがいかもしれません。'; }
+    });
+  };
+
+  window.AkozaIndex = function (checksText) {
+    var checks = JSON.parse(checksText);
+    var form = document.getElementById('pwform'), input = document.getElementById('pw'), msg = document.getElementById('msg');
+    var logout = document.getElementById('logout'), box = document.getElementById('loginbox');
+    function apply(tier) {
+      document.querySelectorAll('.chap').forEach(function (el) {
+        var need = Number(el.getAttribute('data-tier'));
+        var open = tier >= need;
+        el.classList.toggle('open', open);
+        el.querySelector('.lock').textContent = open ? '' : '🔒';
+      });
+      logout.hidden = tier === 0;
+      if (tier > 0) { msg.textContent = ''; }
+    }
+    async function tryAll(list) {
+      var best = 0;
+      for (var i = 0; i < list.length; i++) {
+        var t = await checkTier(list[i], checks);
+        if (t > 0) { savePw(list[i]); best = Math.max(best, t); }
+      }
+      return best;
+    }
+    tryAll(getPws()).then(apply);
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      msg.textContent = '確認しています…';
+      var pw = input.value.trim();
+      var t = await checkTier(pw, checks);
+      if (t > 0) { savePw(pw); input.value = ''; var all = await tryAll(getPws()); apply(all); msg.textContent = '開きました。見られる章に鍵がなくなっています。'; }
+      else { msg.textContent = 'このパスワードでは開けません。入力のまちがいかもしれません。'; }
+    });
+    logout.addEventListener('click', function () { clearPws(); apply(0); msg.textContent = 'ログアウトしました。'; });
+  };
+})();
+</script>
+<script>AkozaIndex(document.getElementById('checks').textContent);</script></body></html>

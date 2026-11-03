@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>請求書の自動化</title>
+<style>
+  :root { --bg:#f6f7fb; --card:#fff; --ink:#1f2330; --sub:#6b7180; --line:#e3e6ee; --ok:#1f9d6b; --warn:#c98a00; --ng:#d23c3c; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Hiragino Sans","Noto Sans JP",sans-serif; background:var(--bg); color:var(--ink); }
+  header { padding:16px 20px; background:#1f2330; color:#fff; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:20px; margin:0; flex:1; }
+  nav button { background:#3a4050; }
+  nav button.on { background:#fff; color:#1f2330; }
+  main { max-width:1080px; margin:0 auto; padding:16px; display:grid; gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  h2 { font-size:16px; margin:0 0 12px; }
+  .row { display:flex; flex-wrap:wrap; gap:8px; align-items:end; }
+  label { display:flex; flex-direction:column; font-size:12px; color:var(--sub); gap:4px; }
+  input, select, textarea, button { font:inherit; padding:8px; border:1px solid var(--line); border-radius:8px; }
+  button { background:#1f2330; color:#fff; border:none; cursor:pointer; }
+  button.sub { background:#e9ecf3; color:var(--ink); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { padding:6px 8px; border-bottom:1px solid var(--line); text-align:left; }
+  .num { text-align:right; font-variant-numeric:tabular-nums; }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+  .kpi .label { color:var(--sub); font-size:13px; } .kpi .val { font-size:24px; font-weight:700; margin-top:4px; }
+  .tag { padding:2px 8px; border-radius:99px; font-size:12px; color:#fff; }
+  .t-入金済み { background:var(--ok); } .t-未入金 { background:var(--warn); } .t-期限切れ { background:var(--ng); }
+  .err { color:var(--ng); font-size:13px; white-space:pre-wrap; }
+  .note { color:var(--sub); font-size:12px; }
+  .hide { display:none !important; }
+  /* 請求書の見た目（印刷もこの形） */
+  .paper { background:#fff; color:#000; max-width:794px; margin:0 auto; padding:48px; border:1px solid var(--line); font-size:14px; }
+  .paper h3 { text-align:center; font-size:26px; letter-spacing:.5em; margin:0 0 24px; }
+  .paper .two { display:flex; justify-content:space-between; gap:24px; }
+  .paper .total { font-size:22px; font-weight:700; border-bottom:2px solid #000; display:inline-block; padding:4px 0; margin:16px 0; }
+  .paper table th { background:#f0f0f0; }
+  @media print {
+    body { background:#fff; } header, .noprint { display:none !important; } main { padding:0; }
+    .paper { border:none; padding:0; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>請求書の自動化</h1>
+  <nav class="row">
+    <button data-tab="list" class="on">一覧</button>
+    <button data-tab="edit">新しく作る</button>
+    <button data-tab="settings">自分の会社の情報</button>
+  </nav>
+</header>
+<main>
+  <!-- 一覧 -->
+  <section id="tab-list" class="noprint">
+    <div class="kpis">
+      <div class="card kpi"><div class="label">請求した合計</div><div class="val" id="k-billed">-</div></div>
+      <div class="card kpi"><div class="label">入金済み</div><div class="val" id="k-paid">-</div></div>
+      <div class="card kpi"><div class="label">未入金</div><div class="val" id="k-unpaid">-</div></div>
+      <div class="card kpi"><div class="label">期限切れ</div><div class="val" id="k-overdue" style="color:var(--ng)">-</div></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h2>請求書の一覧</h2>
+      <div class="row" style="margin-bottom:8px">
+        <label>しぼりこみ<select id="filter"><option value="">すべて</option><option>未入金</option><option>期限切れ</option><option>入金済み</option></select></label>
+        <button class="sub" id="export">表として書き出す（CSV）</button>
+      </div>
+      <table><thead><tr><th>番号</th><th>取引先</th><th>発行日</th><th>期限</th><th class="num">金額（税込）</th><th>状態</th><th></th></tr></thead><tbody id="list"></tbody></table>
+      <p class="note">入れた内容は、このパソコンのブラウザの中だけに保存されます。外には送りません。</p>
+    </div>
+  </section>
+
+  <!-- 作成 -->
+  <section id="tab-edit" class="hide">
+    <div class="card noprint">
+      <h2 id="edit-title">新しい請求書</h2>
+      <div class="row">
+        <label>取引先<input id="f-client" list="clients" placeholder="例：株式会社サンプル商事"></label>
+        <label>発行日<input id="f-issue" type="date"></label>
+        <label>支払期限<input id="f-due" type="date"></label>
+        <button class="sub" id="due-auto" type="button">翌月末にする</button>
+      </div>
+      <datalist id="clients"></datalist>
+      <table style="margin-top:12px"><thead><tr><th>品目</th><th class="num" style="width:90px">数量</th><th class="num" style="width:130px">単価（税抜）</th><th style="width:90px">税率</th><th class="num" style="width:130px">金額</th><th></th></tr></thead><tbody id="items"></tbody></table>
+      <div class="row" style="margin-top:8px">
+        <button class="sub" id="add-item" type="button">行を足す</button>
+        <label style="flex:1">備考<input id="f-memo"></label>
+      </div>
+      <div class="err" id="edit-err"></div>
+      <div class="row" style="margin-top:12px">
+        <button id="save">保存する</button>
+        <button class="sub" id="print" type="button">印刷・PDFにする</button>
+      </div>
+    </div>
+    <div class="paper" id="paper" style="margin-top:16px"></div>
+  </section>
+
+  <!-- 自社情報 -->
+  <section id="tab-settings" class="hide card">
+    <h2>自分の会社の情報（請求書に載ります）</h2>
+    <div style="display:grid; gap:8px; max-width:560px">
+      <label>会社名・屋号<input id="s-name"></label>
+      <label>住所<input id="s-addr"></label>
+      <label>電話<input id="s-tel"></label>
+      <label>登録番号（インボイス・T＋13桁。なければ空欄）<input id="s-reg" placeholder="T1234567890123"></label>
+      <label>振込先<textarea id="s-bank" rows="2"></textarea></label>
+      <button id="s-save">保存する</button>
+      <div class="note" id="s-msg"></div>
+    </div>
+  </section>
+</main>
+<script src="logic.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
+const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+const today = () => new Date().toLocaleDateString("sv-SE");
+let invoices = load("inv.list.v1", []);
+let me = load("inv.me.v1", {});
+let editing = null; // 直している請求書の番号
+
+function tab(name) {
+  document.querySelectorAll("nav button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name));
+  ["list", "edit", "settings"].forEach((t) => $("tab-" + t).classList.toggle("hide", t !== name));
+  if (name === "list") renderList();
+}
+document.querySelectorAll("nav button").forEach((b) => (b.onclick = () => { if (b.dataset.tab === "edit") newInvoice(); tab(b.dataset.tab); }));
+
+// 一覧
+function renderList() {
+  const t = today(), s = Inv.summary(invoices, t), f = $("filter").value;
+  $("k-billed").textContent = Inv.yen(s.billed); $("k-paid").textContent = Inv.yen(s.paid);
+  $("k-unpaid").textContent = Inv.yen(s.unpaid); $("k-overdue").textContent = Inv.yen(s.overdue);
+  $("list").innerHTML = invoices.slice().sort((a, b) => b.no.localeCompare(a.no))
+    .filter((v) => !f || Inv.status(v, t) === f)
+    .map((v) => { const st = Inv.status(v, t); return `<tr><td>${v.no}</td><td>${esc(v.client)}</td><td>${v.issueDate}</td><td>${v.dueDate}</td><td class="num">${Inv.yen(Inv.totals(v).total)}</td>
+      <td><span class="tag t-${st}">${st}</span>${v.paidDate ? `<div class="note">${v.paidDate} 入金</div>` : ""}</td>
+      <td class="row"><button class="sub" data-open="${v.no}">開く</button>${v.paidDate ? `<button class="sub" data-unpay="${v.no}">入金を取り消す</button>` : `<button data-pay="${v.no}">入金あり</button>`}<button class="sub" data-del="${v.no}">消す</button></td></tr>`; }).join("")
+    || `<tr><td colspan="7" class="note">まだ請求書がありません。「新しく作る」から作ってください。</td></tr>`;
+  $("clients").innerHTML = [...new Set(invoices.map((v) => v.client))].map((c) => `<option value="${esc(c)}">`).join("");
+}
+$("filter").onchange = renderList;
+$("list").onclick = (ev) => {
+  const d = ev.target.dataset, v = invoices.find((x) => x.no === (d.open || d.pay || d.unpay || d.del));
+  if (!v) return;
+  if (d.open) { openInvoice(v); tab("edit"); }
+  if (d.pay) { const day = prompt("入金日（例：2026-11-30）", today()); if (day && /^\d{4}-\d{2}-\d{2}$/.test(day)) { v.paidDate = day; store("inv.list.v1", invoices); renderList(); } }
+  if (d.del && confirm(`${v.no} を消します。よいですか？`)) { invoices = invoices.filter((x) => x !== v); store("inv.list.v1", invoices); renderList(); }
+  if (d.unpay) { v.paidDate = ""; store("inv.list.v1", invoices); renderList(); }
+};
+$("export").onclick = () => {
+  const t = today();
+  const csv = "番号,取引先,発行日,期限,小計,消費税,合計,状態,入金日\n" + invoices.map((v) => { const x = Inv.totals(v); return [v.no, v.client, v.issueDate, v.dueDate, x.subtotal, x.tax, x.total, Inv.status(v, t), v.paidDate || ""].join(","); }).join("\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv" })); a.download = "請求書一覧.csv"; a.click();
+};
+
+// 作成
+function itemRow(it = { name: "", qty: 1, price: 0, rate: 10 }) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `<td><input class="i-name" value="${esc(it.name)}" style="width:100%"></td><td><input class="i-qty num" type="number" step="any" value="${it.qty}" style="width:80px"></td>
+    <td><input class="i-price num" type="number" step="1" value="${it.price}" style="width:120px"></td>
+    <td><select class="i-rate"><option value="10">10%</option><option value="8">8%</option></select></td><td class="num i-amt"></td><td><button class="sub" type="button">×</button></td>`;
+  tr.querySelector(".i-rate").value = String(it.rate);
+  tr.querySelector("button").onclick = () => { tr.remove(); preview(); };
+  tr.oninput = preview;
+  $("items").appendChild(tr);
+}
+function form() {
+  return { no: editing, client: $("f-client").value.trim(), issueDate: $("f-issue").value, dueDate: $("f-due").value, memo: $("f-memo").value,
+    items: [...$("items").children].map((tr) => ({ name: tr.querySelector(".i-name").value.trim(), qty: Number(tr.querySelector(".i-qty").value), price: Number(tr.querySelector(".i-price").value), rate: Number(tr.querySelector(".i-rate").value) })) };
+}
+function newInvoice() {
+  editing = null; $("edit-title").textContent = "新しい請求書";
+  $("f-client").value = ""; $("f-issue").value = today(); $("f-due").value = Inv.endOfNextMonth(today()); $("f-memo").value = "";
+  $("items").innerHTML = ""; itemRow(); $("edit-err").textContent = ""; preview();
+}
+function openInvoice(v) {
+  editing = v.no; $("edit-title").textContent = "請求書 " + v.no;
+  $("f-client").value = v.client; $("f-issue").value = v.issueDate; $("f-due").value = v.dueDate; $("f-memo").value = v.memo || "";
+  $("items").innerHTML = ""; v.items.forEach(itemRow); $("edit-err").textContent = ""; preview();
+}
+function preview() {
+  const v = form(), x = Inv.totals(v);
+  [...$("items").children].forEach((tr, i) => (tr.querySelector(".i-amt").textContent = Inv.yen(Inv.lineAmount(v.items[i]))));
+  const no = editing || (v.issueDate ? Inv.nextNo(invoices, v.issueDate) : "");
+  $("paper").innerHTML = `<h3>請求書</h3>
+    <div class="two"><div><div style="font-size:18px; border-bottom:1px solid #000; padding-bottom:4px">${esc(v.client) || "（取引先）"} 御中</div>
+      <p>下記のとおりご請求申し上げます。</p><div class="total">ご請求金額　${Inv.yen(x.total)}（税込）</div><div>お支払期限：${v.dueDate || "-"}</div></div>
+      <div style="text-align:right">請求書番号：${no}<br>発行日：${v.issueDate || "-"}<br><br><b>${esc(me.name) || "（自分の会社名）"}</b><br>${esc(me.addr)}<br>${esc(me.tel)}${me.reg ? `<br>登録番号：${esc(me.reg)}` : ""}</div></div>
+    <table style="margin-top:16px"><thead><tr><th>品目</th><th class="num">数量</th><th class="num">単価</th><th class="num">税率</th><th class="num">金額</th></tr></thead><tbody>
+      ${v.items.filter((it) => it.name).map((it) => `<tr><td>${esc(it.name)}${it.rate === 8 ? " ※" : ""}</td><td class="num">${it.qty}</td><td class="num">${Inv.yen(it.price)}</td><td class="num">${it.rate}%</td><td class="num">${Inv.yen(Inv.lineAmount(it))}</td></tr>`).join("")}</tbody></table>
+    <table style="width:60%; margin:16px 0 0 auto">${x.rates.map((g) => `<tr><td>${g.rate}%対象 小計</td><td class="num">${Inv.yen(g.subtotal)}</td></tr><tr><td>消費税（${g.rate}%）</td><td class="num">${Inv.yen(g.tax)}</td></tr>`).join("")}
+      <tr><th>合計</th><th class="num">${Inv.yen(x.total)}</th></tr></table>
+    ${x.rates.some((g) => g.rate === 8) ? `<p class="note">※は軽減税率（8%）の対象です。</p>` : ""}
+    <p><b>お振込先</b><br>${esc(me.bank).replace(/\n/g, "<br>") || "（振込先）"}</p>${v.memo ? `<p>備考：${esc(v.memo)}</p>` : ""}`;
+}
+["f-client", "f-issue", "f-due", "f-memo"].forEach((id) => ($(id).oninput = preview));
+$("add-item").onclick = () => itemRow();
+$("due-auto").onclick = () => { if ($("f-issue").value) { $("f-due").value = Inv.endOfNextMonth($("f-issue").value); preview(); } };
+$("save").onclick = () => {
+  const v = form(); v.items = v.items.filter((it) => it.name);
+  const errs = Inv.validate(v); $("edit-err").textContent = errs.join("\n"); if (errs.length) return;
+  if (editing) { const old = invoices.find((x) => x.no === editing); Object.assign(old, v, { paidDate: old.paidDate }); }
+  else { v.no = Inv.nextNo(invoices, v.issueDate); v.paidDate = ""; invoices.push(v); editing = v.no; }
+  store("inv.list.v1", invoices); $("edit-title").textContent = "請求書 " + editing + "（保存しました）"; preview();
+};
+$("print").onclick = () => window.print();
+
+// 自社情報
+function fillMe() { $("s-name").value = me.name || ""; $("s-addr").value = me.addr || ""; $("s-tel").value = me.tel || ""; $("s-reg").value = me.reg || ""; $("s-bank").value = me.bank || ""; }
+$("s-save").onclick = () => {
+  const reg = $("s-reg").value.trim();
+  if (reg && !/^T\d{13}$/.test(reg)) { $("s-msg").textContent = "登録番号は T と13桁の数字です"; return; }
+  me = { name: $("s-name").value.trim(), addr: $("s-addr").value.trim(), tel: $("s-tel").value.trim(), reg, bank: $("s-bank").value.trim() };
+  store("inv.me.v1", me); $("s-msg").textContent = "保存しました";
+};
+fillMe(); renderList();
+</script>
+</body>
+</html>

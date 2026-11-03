@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数字ダッシュボード</title>
+<style>
+  :root { --bg:#f6f7fb; --card:#fff; --ink:#1f2330; --sub:#6b7180; --line:#e3e6ee; --sales:#2f7de1; --cost:#e2683c; --ok:#1f9d6b; --ng:#d23c3c; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: "Hiragino Sans","Noto Sans JP",sans-serif; background:var(--bg); color:var(--ink); }
+  header { padding:16px 20px; background:#1f2330; color:#fff; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:20px; margin:0; flex:1; }
+  main { max-width:1080px; margin:0 auto; padding:16px; display:grid; gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+  .kpi .label { color:var(--sub); font-size:13px; }
+  .kpi .val { font-size:26px; font-weight:700; margin-top:4px; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px; }
+  h2 { font-size:16px; margin:0 0 12px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { padding:6px 8px; border-bottom:1px solid var(--line); text-align:left; }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .bar { height:10px; background:var(--cost); border-radius:5px; }
+  form { display:flex; flex-wrap:wrap; gap:8px; align-items:end; }
+  label { display:flex; flex-direction:column; font-size:12px; color:var(--sub); gap:4px; }
+  input, select, textarea, button { font:inherit; padding:8px; border:1px solid var(--line); border-radius:8px; }
+  button { background:#1f2330; color:#fff; border:none; cursor:pointer; }
+  button.sub { background:#e9ecf3; color:var(--ink); }
+  .actions li { margin:6px 0; line-height:1.6; }
+  .err { color:var(--ng); font-size:13px; white-space:pre-wrap; }
+  .note { color:var(--sub); font-size:12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>数字ダッシュボード</h1>
+  <label style="color:#cfd3dc">表示する月 <select id="month"></select></label>
+</header>
+<main>
+  <section class="kpis">
+    <div class="card kpi"><div class="label">売上</div><div class="val" id="k-sales">-</div></div>
+    <div class="card kpi"><div class="label">経費</div><div class="val" id="k-cost">-</div></div>
+    <div class="card kpi"><div class="label">利益</div><div class="val" id="k-profit">-</div></div>
+    <div class="card kpi"><div class="label">利益率</div><div class="val" id="k-margin">-</div></div>
+  </section>
+
+  <section class="card">
+    <h2>次の一手</h2>
+    <ul class="actions" id="actions"></ul>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <h2>経費の高い順</h2>
+      <table><thead><tr><th>項目</th><th class="num">金額</th><th class="num">割合</th><th style="width:30%"></th></tr></thead><tbody id="rank"></tbody></table>
+    </div>
+    <div class="card">
+      <h2>月ごとの推移</h2>
+      <table><thead><tr><th>月</th><th class="num">売上</th><th class="num">経費</th><th class="num">利益</th></tr></thead><tbody id="trend"></tbody></table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>1件ずつ入れる</h2>
+    <form id="add">
+      <label>日付<input type="date" name="date" required></label>
+      <label>種類<select name="kind"><option>売上</option><option>経費</option></select></label>
+      <label>項目<input name="category" list="cats" placeholder="例：材料費" required></label>
+      <label>金額（円）<input name="amount" type="number" min="0" step="1" required></label>
+      <label>メモ<input name="memo"></label>
+      <button>追加</button>
+    </form>
+    <datalist id="cats"></datalist>
+    <div class="err" id="add-err"></div>
+  </section>
+
+  <section class="card">
+    <h2>まとめて貼る（日付,種類,項目,金額,メモ）</h2>
+    <textarea id="paste" rows="5" style="width:100%" placeholder="2026-10-01,売上,施工代,55000,&#10;2026-10-03,経費,材料費,12000,洗剤"></textarea>
+    <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
+      <button id="import">取り込む</button>
+      <button class="sub" id="export">表として書き出す（CSV）</button>
+      <button class="sub" id="clear">全部消す</button>
+    </div>
+    <div class="err" id="paste-err"></div>
+  </section>
+
+  <section class="card">
+    <h2>記録（この月）</h2>
+    <table><thead><tr><th>日付</th><th>種類</th><th>項目</th><th class="num">金額</th><th>メモ</th><th></th></tr></thead><tbody id="list"></tbody></table>
+    <p class="note">入れた数字は、このパソコンのブラウザの中だけに保存されます。外には送りません。</p>
+  </section>
+</main>
+<script src="logic.js"></script>
+<script>
+const KEY = "dash.entries.v1";
+let entries = [];
+try { entries = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { entries = []; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(entries)); } catch {} };
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function months() {
+  const ms = [...new Set(entries.map((e) => Dash.monthOf(e.date)))].sort().reverse();
+  const now = new Date().toISOString().slice(0, 7);
+  if (!ms.includes(now)) ms.unshift(now);
+  return ms;
+}
+
+function render() {
+  const sel = $("month"), keep = sel.value;
+  sel.innerHTML = months().map((m) => `<option>${m}</option>`).join("");
+  if (keep && [...sel.options].some((o) => o.value === keep)) sel.value = keep;
+  const ym = sel.value;
+  const s = Dash.summarize(entries, ym);
+  $("k-sales").textContent = Dash.yen(s.sales);
+  $("k-cost").textContent = Dash.yen(s.cost);
+  $("k-profit").textContent = Dash.yen(s.profit);
+  $("k-profit").style.color = s.profit < 0 ? "var(--ng)" : "var(--ok)";
+  $("k-margin").textContent = s.margin === null ? "-" : Math.round(s.margin * 100) + "%";
+  $("actions").innerHTML = Dash.nextActions(entries, ym).map((t) => `<li>${esc(t)}</li>`).join("");
+  $("rank").innerHTML = s.costRank.map((r) =>
+    `<tr><td>${esc(r.category)}</td><td class="num">${Dash.yen(r.amount)}</td><td class="num">${Math.round(r.share * 100)}%</td><td><div class="bar" style="width:${Math.round(r.share * 100)}%"></div></td></tr>`).join("")
+    || `<tr><td colspan="4" class="note">経費の記録がありません</td></tr>`;
+  $("trend").innerHTML = Dash.monthly(entries).slice(-6).reverse().map((m) =>
+    `<tr><td>${m.ym}</td><td class="num">${Dash.yen(m.sales)}</td><td class="num">${Dash.yen(m.cost)}</td><td class="num" style="color:${m.profit < 0 ? "var(--ng)" : "inherit"}">${Dash.yen(m.profit)}</td></tr>`).join("");
+  $("list").innerHTML = entries.map((e, i) => ({ e, i })).filter(({ e }) => Dash.monthOf(e.date) === ym)
+    .sort((a, b) => a.e.date.localeCompare(b.e.date))
+    .map(({ e, i }) => `<tr><td>${e.date}</td><td>${e.kind}</td><td>${esc(e.category)}</td><td class="num">${Dash.yen(e.amount)}</td><td>${esc(e.memo || "")}</td><td><button class="sub" data-del="${i}">消す</button></td></tr>`).join("");
+  $("cats").innerHTML = [...new Set(entries.map((e) => e.category))].map((c) => `<option value="${esc(c)}">`).join("");
+}
+
+$("month").onchange = render;
+$("add").onsubmit = (ev) => {
+  ev.preventDefault();
+  const f = new FormData(ev.target);
+  const e = { date: f.get("date"), kind: f.get("kind"), category: f.get("category").trim(), amount: Number(f.get("amount")), memo: f.get("memo") };
+  const errs = Dash.validate(e);
+  $("add-err").textContent = errs.join("\n");
+  if (errs.length) return;
+  entries.push(e); save();
+  $("month").value = Dash.monthOf(e.date);
+  ev.target.reset(); render();
+};
+$("import").onclick = () => {
+  const r = Dash.parseCSV($("paste").value);
+  entries.push(...r.entries); save();
+  $("paste-err").textContent = `${r.entries.length}件 取り込みました` + (r.errors.length ? "\n取り込めなかった行：\n" + r.errors.join("\n") : "");
+  if (r.entries.length) $("paste").value = "";
+  render();
+};
+$("export").onclick = () => {
+  const csv = "日付,種類,項目,金額,メモ\n" + entries.map((e) => [e.date, e.kind, e.category, e.amount, e.memo || ""].join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv" }));
+  a.download = "数字ダッシュボード.csv"; a.click();
+};
+$("clear").onclick = () => { if (confirm("記録を全部消します。よいですか？")) { entries = []; save(); render(); } };
+$("list").onclick = (ev) => {
+  const i = ev.target.dataset.del;
+  if (i !== undefined) { entries.splice(Number(i), 1); save(); render(); }
+};
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>④ 毎朝の段取り</title><style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#1f2330;--sub:#6b7180;--line:#e3e6ee;--y:#FFD93D}
+*{box-sizing:border-box}body{margin:0;font-family:"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+header{background:#1f2330;color:#fff;padding:20px 16px}header h1{margin:0;font-size:22px}header p{margin:4px 0 0;color:#cfd3dc;font-size:14px}
+main{max-width:960px;margin:0 auto;padding:16px;display:grid;gap:16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h2{margin:0 0 6px;font-size:18px}.card .no{display:inline-block;background:var(--y);border-radius:6px;padding:0 8px;margin-right:6px}
+.card p{margin:6px 0;font-size:14px}.card .who{color:var(--sub)}
+a.btn{display:inline-block;margin-top:8px;background:#1f2330;color:#fff;text-decoration:none;padding:10px 14px;border-radius:8px;font-size:15px}
+pre{background:#1f2330;color:#f3f3f3;padding:12px;border-radius:8px;overflow-x:auto;font-size:13px;white-space:pre-wrap}
+.note{color:var(--sub);font-size:13px}
+</style></head><body>
+<header><h1>④ 毎朝の段取り（見本）</h1><p>コマンド1つで、日付ごとの段取りレポートを作ります。パソコン（Mac／Windows）で動かします。</p></header>
+<main>
+<div class="card"><h2>1. ダウンロード</h2><a class="btn" href="毎朝の段取り_04_morning.zip" download>一式をダウンロード（zip）</a><p class="note">中身：dandori.py（段取り役）、parts/（予定・メール・受注の部品）、dummy/（架空データ）、config.json（設定）、tests/、README.md。Python の標準ライブラリだけで動きます。</p></div>
+<div class="card"><h2>2. 動かす（架空データで試す）</h2><p>Mac（ターミナル）</p><pre>cd 04_morning
+python3 dandori.py 2026-11-09</pre><p>Windows（PowerShell）</p><pre>cd 04_morning
+py dandori.py 2026-11-09</pre><p><code>reports/2026-11-09_段取り.md</code> ができます。日付を省くと今日の分です。</p></div>
+<div class="card"><h2>3. 自分のデータに差し替える</h2><p><code>config.json</code> の部品ごとに <code>source</code> を <code>dummy</code>（架空）→ <code>csv_export</code>（自分のシステムの書き出しCSV。<code>path</code> と、列名の対応 <code>columns</code>）に替えます。使わない部品は <code>"on": false</code>。くわしくは README.md。</p><p class="note">自分のデータとレポートは exports/・reports/ に置き、GitHub などには上げないでください。</p></div>
+<div class="card"><h2>見本：架空データで出たレポート</h2><pre># 2026-11-09 の段取り
+
+## まずこれ（3つ）
+1. 【急ぎ】今日の出荷 2件の梱包・出荷（20分）― 集荷（15:00）までに出す
+2. 【急ぎ】テスト工務店「見積もりのお願い」に返信（10分）― 受け取ってから1日たっています
+3. 【今日】サンプル商事「納期の確認」に返信（10分）― 今日届いたもの
+
+## 時間割（埋まっている時間 4時間0分）
+
+| 時間 | やること | 種類 | 急ぎ度 |
+|---|---|---|---|
+| 09:00〜09:20 | 今日の出荷 2件の梱包・出荷 | 発送 | 急ぎ |
+| 09:20〜09:30 | テスト工務店「見積もりのお願い」に返信 | 返信 | 急ぎ |
+| 09:30〜09:40 | サンプル商事「納期の確認」に返信 | 返信 | 今日 |
+| 09:40〜09:50 | 架空太郎「問い合わせフォームより」に返信 | 返信 | 今日 |
+| 09:50〜10:00 | 新しい注文 2件の登録と受け付けの連絡 | 受注 | 今日 |
+| 10:00〜12:00 | サンプル様宅 エアコン清掃 | 予定 | 予定 |
+| 15:30〜16:30 | 打ち合わせ（オンライン） | 予定 | 予定 |
+
+## 予定
+
+- 10:00〜（120分）サンプル様宅 エアコン清掃
+- 15:30〜（60分）打ち合わせ（オンライン）
+
+## メール
+
+### テスト工務店「見積もりのお願い」（11/08 受信・急ぎ）
+```
+テスト工務店様
+
+ご連絡ありがとうございます。「見積もりのお願い」の件、承知しました。
+内容を確認し、本日中にあらためてご連絡いたします。
+```
+### サンプル商事「納期の確認」（11/09 受信・今日）
+```
+サンプル商事様
+
+ご連絡ありがとうございます。「納期の確認」の件、承知しました。
+内容を確認し、明日までにあらためてご連絡いたします。
+```
+### 架空太郎「問い合わせフォームより」（11/09 受信・今日）
+```
+架空太郎様
+
+ご連絡ありがとうございます。「問い合わせフォームより」の件、承知しました。
+内容を確認し、明日までにあらためてご連絡いたします。
+```
+
+## 受注
+
+**今日の出荷（2件）**
+- #0998　洗剤セット × 2
+- #0995　マイクロファイバー布 × 10（出荷予定日を過ぎています）
+
+**登録待ちの新しい注文（2件）**
+- #1001　洗剤セット × 1
+- #1002　防カビ剤 × 3
+
+---
+部品：使った 予定・メール・受注／止めている 送り状・在庫・SNS・労務・会計／補講でつなぐ 送り状・在庫・SNS・労務・会計
+</pre></div>
+</main></body></html>

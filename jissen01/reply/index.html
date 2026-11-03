@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>予約・返信の型</title>
+<style>
+  :root { --bg:#f6f7fb; --card:#fff; --ink:#1f2330; --sub:#6b7180; --line:#e3e6ee; --ok:#1f9d6b; --warn:#c98a00; --ng:#d23c3c; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Hiragino Sans","Noto Sans JP",sans-serif; background:var(--bg); color:var(--ink); }
+  header { padding:16px 20px; background:#1f2330; color:#fff; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:20px; margin:0; flex:1; }
+  nav button { background:#3a4050; } nav button.on { background:#fff; color:#1f2330; }
+  main { max-width:1080px; margin:0 auto; padding:16px; display:grid; gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:16px; }
+  h2 { font-size:16px; margin:0 0 12px; }
+  label { display:flex; flex-direction:column; font-size:12px; color:var(--sub); gap:4px; }
+  input, select, textarea, button { font:inherit; padding:8px; border:1px solid var(--line); border-radius:8px; }
+  textarea { width:100%; }
+  button { background:#1f2330; color:#fff; border:none; cursor:pointer; }
+  button.sub { background:#e9ecf3; color:var(--ink); }
+  .row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { padding:6px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  .tag { padding:2px 8px; border-radius:99px; font-size:12px; background:#e9ecf3; }
+  .t-仮 { background:#fff2cc; } .t-確定 { background:#d6f5e7; } .t-済み { background:#e9ecf3; color:var(--sub); }
+  dl { display:grid; grid-template-columns:auto 1fr; gap:4px 12px; margin:0; font-size:14px; }
+  dt { color:var(--sub); }
+  .note { color:var(--sub); font-size:12px; }
+  .hide { display:none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>予約・返信の型</h1>
+  <nav class="row">
+    <button data-tab="reply" class="on">返信を作る</button>
+    <button data-tab="bookings">予約の一覧</button>
+    <button data-tab="shop">自分の店の情報と型</button>
+  </nav>
+</header>
+<main>
+  <section id="tab-reply" class="grid2">
+    <div class="card">
+      <h2>1. 問い合わせ文を貼る</h2>
+      <textarea id="in" rows="10" placeholder="例：山田と申します。11月12日の午後にエアコン2台のお掃除をお願いしたいです。"></textarea>
+      <div class="row" style="margin-top:8px"><button id="go">下書きを作る</button><button class="sub" id="reset">消す</button></div>
+      <h2 style="margin-top:16px">読み取ったこと</h2>
+      <dl id="info"><dt>種類</dt><dd>-</dd></dl>
+    </div>
+    <div class="card">
+      <h2>2. 返信の下書き（直してから使う）</h2>
+      <textarea id="out" rows="16"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button id="copy">コピーする</button>
+        <button class="sub" id="book">予約の一覧に入れる</button>
+        <span class="note" id="msg"></span>
+      </div>
+      <p class="note">このページは返信を送りません。コピーして、いつものメール・LINEから送ってください。</p>
+    </div>
+  </section>
+
+  <section id="tab-bookings" class="card hide">
+    <h2>予約の一覧</h2>
+    <table><thead><tr><th>日付</th><th>時間</th><th>お名前</th><th>連絡先</th><th>内容</th><th>状態</th><th></th></tr></thead><tbody id="list"></tbody></table>
+    <p class="note">入れた内容は、このパソコンのブラウザの中だけに保存されます。外には送りません。</p>
+  </section>
+
+  <section id="tab-shop" class="hide grid2">
+    <div class="card">
+      <h2>自分の店の情報</h2>
+      <div style="display:grid; gap:8px">
+        <label>店名<input id="s-name"></label>
+        <label>営業時間<input id="s-hours" placeholder="9:00〜18:00"></label>
+        <label>定休日（曜日を「・」で区切る）<input id="s-hol" placeholder="日・祝"></label>
+        <label>電話<input id="s-phone"></label>
+        <label>予約のときに聞くこと（なければ空欄）<input id="s-ask" placeholder="台数（エアコンなら何台か）"></label>
+        <label>料金表（1行に「品目,料金」）<textarea id="s-prices" rows="5" placeholder="エアコン,12000&#10;お風呂,15000"></textarea></label>
+      </div>
+    </div>
+    <div class="card">
+      <h2>返信の型（{店名}{料金}{希望日時}{確認}{しめ} が入れ替わります）</h2>
+      <label>型の種類<select id="t-kind"></select></label>
+      <textarea id="t-body" rows="12" style="margin-top:8px"></textarea>
+      <div class="row" style="margin-top:8px"><button id="s-save">店の情報と型を保存</button><button class="sub" id="t-reset">この型を最初に戻す</button><span class="note" id="s-msg"></span></div>
+    </div>
+  </section>
+</main>
+<script src="logic.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
+const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+const today = () => new Date().toLocaleDateString("sv-SE");
+let shop = load("reply.shop.v1", { name: "", hours: "", holidays: [], phone: "", askCount: "", prices: [] });
+let templates = Object.assign({}, Reply.DEFAULT_TEMPLATES, load("reply.templates.v1", {}));
+let bookings = load("reply.bookings.v1", []);
+let last = null;
+
+function tab(name) {
+  document.querySelectorAll("nav button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name));
+  ["reply", "bookings", "shop"].forEach((t) => $("tab-" + t).classList.toggle("hide", t !== name));
+  if (name === "bookings") renderBookings();
+}
+document.querySelectorAll("nav button").forEach((b) => (b.onclick = () => tab(b.dataset.tab)));
+
+$("go").onclick = () => {
+  const text = $("in").value.trim();
+  if (!text) return;
+  last = Reply.draft(text, shop, today(), templates);
+  last.text = text;
+  const i = last.info;
+  $("info").innerHTML = [["種類", last.kind], ["お名前", i.name], ["希望日", i.date ? `${i.date}（${Reply.weekday(i.date)}）` : ""], ["時間", i.time], ["数", i.count], ["電話", i.phone], ["メール", i.email], ["聞き返すこと", last.ask.join("／")]]
+    .map(([k, v]) => `<dt>${k}</dt><dd>${esc(v) || '<span class="note">読み取れず</span>'}</dd>`).join("");
+  $("out").value = last.body;
+  $("book").disabled = !["予約", "日程変更"].includes(last.kind);
+  $("msg").textContent = "";
+  if (!shop.name) $("msg").textContent = "「自分の店の情報と型」を先に入れると、下書きに店名と料金が入ります";
+};
+$("reset").onclick = () => { $("in").value = ""; $("out").value = ""; $("info").innerHTML = "<dt>種類</dt><dd>-</dd>"; last = null; };
+$("copy").onclick = async () => { try { await navigator.clipboard.writeText($("out").value); $("msg").textContent = "コピーしました"; } catch { $("out").select(); $("msg").textContent = "選んだ状態にしました。⌘C（Ctrl+C）でコピーしてください"; } };
+$("book").onclick = () => {
+  if (!last) return;
+  const b = Reply.toBooking(last, last.text, Date.now());
+  if (!b) return;
+  bookings.push(b); store("reply.bookings.v1", bookings);
+  $("msg").textContent = "予約の一覧に「仮」で入れました";
+};
+
+function renderBookings() {
+  const order = { 仮: 0, 確定: 1, 済み: 2 };
+  $("list").innerHTML = bookings.slice().sort((a, b) => (order[a.status] - order[b.status]) || String(a.date || "9").localeCompare(String(b.date || "9")))
+    .map((b) => `<tr><td>${b.date ? `${b.date}（${Reply.weekday(b.date)}）` : '<span class="note">未定</span>'}</td><td>${esc(b.time)}</td><td>${esc(b.name)}</td><td>${esc(b.phone || b.email)}</td>
+      <td style="max-width:280px"><details><summary>${esc(b.kind)}${b.count ? "・" + esc(b.count) : ""}</summary><div class="note" style="white-space:pre-wrap">${esc(b.text)}</div></details></td>
+      <td><select data-st="${b.id}">${["仮", "確定", "済み"].map((s) => `<option ${s === b.status ? "selected" : ""}>${s}</option>`).join("")}</select></td>
+      <td><button class="sub" data-del="${b.id}">消す</button></td></tr>`).join("")
+    || `<tr><td colspan="7" class="note">まだ予約がありません</td></tr>`;
+}
+$("list").onchange = (ev) => { const b = bookings.find((x) => String(x.id) === ev.target.dataset.st); if (b) { b.status = ev.target.value; store("reply.bookings.v1", bookings); renderBookings(); } };
+$("list").onclick = (ev) => { const id = ev.target.dataset.del; if (id && confirm("この予約を消します。よいですか？")) { bookings = bookings.filter((x) => String(x.id) !== id); store("reply.bookings.v1", bookings); renderBookings(); } };
+
+// 店の情報と型
+function fillShop() {
+  $("s-name").value = shop.name; $("s-hours").value = shop.hours; $("s-hol").value = shop.holidays.join("・"); $("s-phone").value = shop.phone; $("s-ask").value = shop.askCount;
+  $("s-prices").value = shop.prices.map((p) => `${p.item},${p.price}`).join("\n");
+  $("t-kind").innerHTML = Object.keys(templates).map((k) => `<option>${k}</option>`).join("");
+  $("t-body").value = templates[$("t-kind").value];
+}
+$("t-kind").onchange = () => ($("t-body").value = templates[$("t-kind").value]);
+$("t-body").oninput = () => (templates[$("t-kind").value] = $("t-body").value);
+$("t-reset").onclick = () => { templates[$("t-kind").value] = Reply.DEFAULT_TEMPLATES[$("t-kind").value]; $("t-body").value = templates[$("t-kind").value]; };
+$("s-save").onclick = () => {
+  const prices = $("s-prices").value.split(/\n/).map((l) => l.split(/,|，|\t/)).filter((c) => c[0] && c[0].trim())
+    .map((c) => ({ item: c[0].trim(), price: Number(String(c[1] || "").replace(/[,円¥\s]/g, "")) }));
+  const bad = prices.filter((p) => !Number.isFinite(p.price) || p.price <= 0);
+  if (bad.length) { $("s-msg").textContent = `料金が読めない行があります：${bad.map((p) => p.item).join("、")}`; return; }
+  shop = { name: $("s-name").value.trim(), hours: $("s-hours").value.trim(), holidays: $("s-hol").value.split(/[・、,\s]+/).filter(Boolean).map((s) => s.replace("曜日", "").replace("曜", "")), phone: $("s-phone").value.trim(), askCount: $("s-ask").value.trim(), prices };
+  store("reply.shop.v1", shop); store("reply.templates.v1", templates);
+  $("s-msg").textContent = "保存しました";
+};
+fillShop();
+</script>
+</body>
+</html>

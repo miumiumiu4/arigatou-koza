@@ -1,0 +1,87 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MUSE実践編 第1回 はじめる前の連携ガイド</title><style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#1f2330;--sub:#6b7180;--line:#e3e6ee;--y:#FFD93D}
+*{box-sizing:border-box}body{margin:0;font-family:"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
+header{background:#1f2330;color:#fff;padding:20px 16px}header h1{margin:0;font-size:22px}header p{margin:4px 0 0;color:#cfd3dc;font-size:14px}
+main{max-width:760px;margin:0 auto;padding:16px;display:grid;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.card h2{margin:0 0 6px;font-size:19px}.no{display:inline-block;background:var(--y);border-radius:6px;padding:0 8px;margin-right:6px}
+.time{display:inline-block;font-size:13px;color:var(--sub);border:1px solid var(--line);border-radius:999px;padding:0 10px}
+.card p{margin:6px 0;font-size:15px}
+ul.steps{list-style:none;margin:8px 0 0;padding:0}
+ul.steps li{border-top:1px solid var(--line);padding:10px 0}
+ul.steps label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:15px}
+ul.steps input{width:22px;height:22px;margin-top:3px;flex:none;accent-color:#1f2330}
+ul.steps input:checked+span{color:var(--sub);text-decoration:line-through}
+.word{background:#fff8d6;border-radius:8px;padding:8px 12px;font-size:14px;margin:8px 0}
+.note{color:var(--sub);font-size:13px}
+a{color:#1f4fbf}
+a.btn{display:inline-block;margin-top:8px;background:#1f2330;color:#fff;text-decoration:none;padding:10px 14px;border-radius:8px;font-size:15px}
+.bar{position:sticky;top:0;background:var(--y);padding:8px 16px;font-size:14px;font-weight:bold;text-align:center;z-index:1}
+</style></head><body>
+<header><h1>はじめる前の連携ガイド</h1><p>MUSE（Claude）と、GitHub・Googleを「つなぐ」準備です。1つ終わるごとにチェックを入れてください。</p></header>
+<div class="bar" id="bar">チェック 0 / 0</div>
+<main>
+<div class="card">
+<h2>まず読んでください</h2>
+<p>「連携」とは、つなぐことです。MUSEとメールや予定表などをつなぐと、MUSEがそれを見て答えたり、下書きを作ったりできるようになります。</p>
+<p>全部で <b>だいたい25分</b> です（GitHubのアカウントを持っている人は15分ほど）。</p>
+<p>つなぐ作業は、<b>パソコンのブラウザ</b>でやるのがいちばん迷いません。スマホでもできますが、画面が小さく、ボタンを探しにくいです。</p>
+<p class="note">画面の言葉やボタンの場所は、少し違うことがあります。似た言葉のボタンを押せば大丈夫です。止まったら、当日のZoomチャットに「どの画面で止まったか」を書いてください。</p>
+</div>
+
+<div class="card">
+<h2><span class="no">1</span>GitHubのアカウントを作る <span class="time">約10分</span></h2>
+<div class="word">GitHub（ギットハブ）＝ネットの上にある、ファイルや報告をしまっておける共有の棚です。<br>すでにアカウントがある人は、この1は飛ばして 2 へ進んでください。</div>
+<ul class="steps">
+<li><label><input type="checkbox"><span><a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a> を開く</span></label></li>
+<li><label><input type="checkbox"><span>メールアドレスを入れる → パスワードを決めて入れる</span></label></li>
+<li><label><input type="checkbox"><span>ユーザー名（GitHubの名前）を決める。英字・数字・ハイフンだけ使えます。<b>この名前はあとで使うので、メモしておいてください</b></span></label></li>
+<li><label><input type="checkbox"><span>「人間かどうか」の確認が出たら、画面の指示どおりに答える</span></label></li>
+<li><label><input type="checkbox"><span>メールに届いた数字（確認コード）を、画面に入れる</span></label></li>
+<li><label><input type="checkbox"><span>料金の画面が出たら、無料（Free）のまま進む。お金はかかりません</span></label></li>
+</ul>
+</div>
+
+<div class="card">
+<h2><span class="no">2</span>MUSEとGitHubをつなぐ <span class="time">約3分</span></h2>
+<ul class="steps">
+<li><label><input type="checkbox"><span>ブラウザで <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a>（MUSE）を開いて、ログインする</span></label></li>
+<li><label><input type="checkbox"><span>左下の自分の名前を押す →「設定」→「コネクタ」を開く</span></label></li>
+<li><label><input type="checkbox"><span>一覧から「GitHub」を探して、「連携」（または「接続」）を押す</span></label></li>
+<li><label><input type="checkbox"><span>GitHubの画面に切り替わったら、GitHubにログインして、緑のボタン「Authorize（許可する）」を押す</span></label></li>
+<li><label><input type="checkbox"><span>MUSEの画面に戻って、GitHubが「連携済み」になっていれば完了</span></label></li>
+</ul>
+<div class="word">「Authorize（許可する）」は、MUSEに「見てもいいですよ」と鍵を貸すボタンです。あとから設定画面で、いつでも外せます。</div>
+</div>
+
+<div class="card">
+<h2><span class="no">3</span>Googleの4つをつなぐ <span class="time">各2〜3分・合計約10分</span></h2>
+<p>やり方は4つとも同じです。「設定」→「コネクタ」の一覧から名前を探して、「連携」を押し、Googleのアカウントを選んで「許可」を押します。</p>
+<div class="word">Googleの画面で「アクセスを許可しますか」と聞かれたら、「許可」（または「続行」）を押します。MUSEが勝手にメールを送ったり、ファイルを消したりはしません。</div>
+<ul class="steps">
+<li><label><input type="checkbox"><span><b>Gmail</b>（メール）をつなぐ</span></label></li>
+<li><label><input type="checkbox"><span><b>Googleドライブ</b>（ファイルの置き場）をつなぐ</span></label></li>
+<li><label><input type="checkbox"><span><b>Googleスプレッドシート</b>（表）をつなぐ</span></label></li>
+<li><label><input type="checkbox"><span><b>Googleドキュメント</b>（文書）をつなぐ</span></label></li>
+</ul>
+<p class="note">スプレッドシートやドキュメントが一覧に見つからない場合は、Googleドライブがつながっていれば、ファイルを読むことはできます。当日はそのまま進めて大丈夫です。</p>
+</div>
+
+<div class="card">
+<h2><span class="no">4</span>つながったか確かめる <span class="time">約1分</span></h2>
+<ul class="steps">
+<li><label><input type="checkbox"><span>MUSEに「今あなたがつながっているものを一覧で教えて」と送る</span></label></li>
+<li><label><input type="checkbox"><span>GitHub・Gmail・Googleドライブなどが出てくれば準備完了です</span></label></li>
+</ul>
+<a class="btn" href="../">入口ページに戻る</a>
+</div>
+</main>
+<script>
+(function(){var boxes=[].slice.call(document.querySelectorAll('ul.steps input')),bar=document.getElementById('bar'),key='jissen01-renkei';
+var saved=[];try{saved=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
+boxes.forEach(function(b,i){b.checked=!!saved[i];b.addEventListener('change',up)});
+function up(){var n=boxes.filter(function(b){return b.checked}).length;bar.textContent=n===boxes.length?'全部できました。お疲れさまでした':'チェック '+n+' / '+boxes.length;
+try{localStorage.setItem(key,JSON.stringify(boxes.map(function(b){return b.checked})))}catch(e){}}
+up()})();
+</script>
+</body></html>

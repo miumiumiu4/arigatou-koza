@@ -1,0 +1,44 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>時間の棚卸し（見本）</title><link rel="stylesheet" href="../common.css"></head><body><div class="wrap">
+<h1>⏱ 時間の棚卸し</h1>
+<p class="muted">見本：架空のエアコンクリーニング店。仕事を書き出すと、任せると浮く時間のトップ3が出ます。入れた内容はこのブラウザの中だけに残ります。</p>
+<div class="card"><h2>仕事を書き出す</h2>
+<p class="muted">1行に1つ：仕事,1回の分数,週の回数,任せられ度（◎よく任せられる／○半分くらい／△自分でやる）</p>
+<textarea id="src"></textarea>
+<button id="go">棚卸しする</button><button class="sub" id="sample">見本を入れる</button><button class="sub" id="clear">消す</button>
+<div id="ng" class="ng"></div></div>
+<div class="row"><div class="card"><div class="muted">1週間にかかっている時間</div><div class="big" id="total">–</div></div>
+<div class="card"><div class="muted">任せると浮く時間</div><div class="big" id="saved">–</div></div></div>
+<div class="card"><h2>任せると浮く時間 トップ3</h2><ol id="top"></ol><p class="muted">▶ を押すと、型メーカーに渡す文をコピーします。</p></div>
+<div class="card over"><h2>仕事の一覧（時間の多い順）</h2><table id="tbl"></table></div>
+<div class="card"><h2>この道具に頼む「型」（見本）</h2><pre>月末に、今月の仕事を思い出して言うので、棚卸しして、任せられるトップ3を出して。トップ1は、そのまま型メーカーに渡す文にして。</pre></div>
+<div class="card"><h2>テスト（架空のデータで計算が合うか）</h2><button class="sub" id="t">テストする</button><ul class="tests" id="tests"></ul></div>
+</div>
+<script src="logic.js"></script><script src="../testkit.js"></script><script>
+const $ = s => document.querySelector(s), KEY = "tana_v1";
+const SAMPLE = `仕事,1回の分数,週の回数,任せられ度
+見積もりの返信,20,12,◎
+SNS投稿,30,6,◎
+請求書づくり,30,5,◎
+現場作業,90,5,△
+予約の電話,10,10,○
+帳簿つけ,60,1,○
+道具の手入れ,30,2,△
+口コミのお礼,5,6,○
+移動,,3,○`;
+function show() {
+  const p = Tana.parse($("#src").value), a = Tana.analyze(p.ok); store.set(KEY, $("#src").value);
+  $("#ng").innerHTML = p.ng.map(e => e.line + "行目：" + esc(e.why)).join("<br>");
+  $("#total").textContent = p.ok.length ? Tana.hm(a.total) : "–"; $("#saved").textContent = p.ok.length ? Tana.hm(a.saved) : "–";
+  $("#top").innerHTML = a.top3.map((r, i) => `<li><b>${esc(r.name)}</b>：週${Tana.hm(r.week)} → 浮く <b class="ok">${Tana.hm(r.save)}</b> <button class="sub" data-i="${i}">▶ 型メーカーへ</button></li>`).join("");
+  $("#top").querySelectorAll("button").forEach(b => b.onclick = () => { const t = Tana.handoff(a.top3[+b.dataset.i]); navigator.clipboard && navigator.clipboard.writeText(t); b.textContent = "コピーしました"; });
+  $("#tbl").innerHTML = "<tr><th>仕事</th><th class='n'>1回</th><th class='n'>週</th><th>任せ</th><th class='n'>週の時間</th></tr>" + a.rows.map(r => `<tr><td>${esc(r.name)}</td><td class="n">${r.min}分</td><td class="n">${r.times}回</td><td>${r.level}</td><td class="n">${Tana.hm(r.week)}</td></tr>`).join("");
+}
+$("#src").value = store.get(KEY, SAMPLE); show();
+$("#go").onclick = show; $("#sample").onclick = () => { $("#src").value = SAMPLE; show(); }; $("#clear").onclick = () => { $("#src").value = ""; show(); };
+$("#t").onclick = () => { const a = Tana.analyze(Tana.parse(SAMPLE).ok), p = Tana.parse(SAMPLE); runTests([
+  ["取り込めるのは8件、はじくのは1件（10行目）", () => p.ok.length === 8 && p.ng.length === 1 && p.ng[0].line === 10],
+  ["1週間の合計 21時間10分", () => Tana.hm(a.total) === "21時間10分"],
+  ["任せると浮く時間 9時間11分", () => Tana.hm(a.saved) === "9時間11分"],
+  ["トップ3：見積もりの返信192分・SNS投稿144分・請求書づくり120分", () => a.top3.map(r => r.name + r.save).join() === "見積もりの返信192,SNS投稿144,請求書づくり120"]], $("#tests")); };
+</script></body></html>

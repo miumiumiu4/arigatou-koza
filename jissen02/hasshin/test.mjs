@@ -1,0 +1,11 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+const H = createRequire(import.meta.url)("./logic.js");
+const DATA = readFileSync(new URL("./sample.txt", import.meta.url), "utf8");
+test("読み取りと並び", () => { const r = H.parse(DATA); assert.equal(r.ok.length, 7); assert.deepEqual(r.ng, [{ line: 9, why: "曜日は 月〜日 の1文字" }]); assert.deepEqual(r.ok.map(p => p.day).join(""), "月火水木金土日"); });
+test("Xの文字数オーバー", () => { const p = H.parse(DATA).ok.find(p => p.day === "火"); const c = H.check(p); assert.equal(c.chars, 152); assert.deepEqual(c.warn, ["Xは140字まで。12字オーバー"]); });
+test("タグが多すぎ", () => { const p = H.parse(DATA).ok.find(p => p.day === "金"); assert.deepEqual(H.check(p).warn, ["タグが11個。多すぎ（目安10個）"]); });
+test("ほかは注意なし", () => { const ps = H.parse(DATA).ok.filter(p => p.day !== "火" && p.day !== "金"); assert.ok(ps.every(p => H.check(p).warn.length === 0)); });
+test("コピー用の文", () => { const p = H.parse(DATA).ok.find(p => p.day === "月"); assert.equal(H.copyText(p), "今週もよろしくお願いします。月曜は道具の手入れの日。きれいな道具で、きれいな仕上がりを。\n\n#エアコンクリーニング #道具"); });

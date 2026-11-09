@@ -1,0 +1,32 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>発信の1週間まとめ書き（見本）</title><link rel="stylesheet" href="../common.css"></head><body><div class="wrap">
+<h1>📣 発信の1週間まとめ書き</h1>
+<p class="muted">見本：架空のエアコンクリーニング店。MUSEが書いた7本の下書きを貼ると、曜日ごとに並び、文字数オーバーとタグの多すぎを知らせます。投稿はしません（下書きまで）。</p>
+<div class="card"><h2>下書きを貼る</h2>
+<p class="muted">1行に1本：曜日｜場所（Instagram・X・LINE・お知らせ）｜本文｜タグ｜写真案</p>
+<textarea id="src"></textarea>
+<button id="go">並べる</button><button class="sub" id="sample">見本を入れる</button><button class="sub" id="clear">消す</button>
+<div id="ng" class="ng"></div></div>
+<div id="week"></div>
+<div class="card"><h2>この道具に頼む「型」（見本）</h2><pre>毎週月曜の朝、今週の出来事を3つ言うので、「曜日｜場所｜本文｜タグ｜写真案」の形で7本書いて。Xは140字以内、タグは10個まで。</pre></div>
+<div class="card"><h2>テスト（架空のデータで計算が合うか）</h2><button class="sub" id="t">テストする</button><ul class="tests" id="tests"></ul></div>
+</div>
+<script src="logic.js"></script><script src="../testkit.js"></script><script>
+const $ = s => document.querySelector(s), KEY = "hasshin_v1";
+const SAMPLE = "曜日｜場所｜本文｜タグ｜写真案\n水｜Instagram｜お客様の声をご紹介します。「においが消えて、子どもの咳が減りました」とのこと。うれしいです。｜#エアコンクリーニング #お客様の声｜作業後のエアコンの正面\n月｜Instagram｜今週もよろしくお願いします。月曜は道具の手入れの日。きれいな道具で、きれいな仕上がりを。｜#エアコンクリーニング #道具｜並べた道具\n火｜X｜エアコンの中、のぞいたことありますか？ 見えない奥にカビやホコリがたまると、風がにおったり電気代が上がったりします。年に1回の分解洗浄で、送風ファンまでまるごとキレイに。今週は平日の午前中にまだ空きがあります。ご予約はプロフィールのリンクから、お気軽にどうぞ。いつも見てくださってありがとうございます！！｜｜分解した送風ファン\n木｜LINE｜【お知らせ】11月のご予約、残り5枠です。ご希望の日をこのLINEに送ってください。｜｜カレンダーの画像\n金｜Instagram｜洗う前と洗った後をくらべてみました。水の色を見てください。｜#エアコンクリーニング #掃除 #お掃除 #夏支度 #暮らし #住まい #カビ対策 #節電 #子育て #家事 #ハウスクリーニング｜バケツの水の前後\n土｜X｜週末はご家族そろってお出かけですか？ エアコンも一休み。お出かけ前に「切」を確かめてくださいね。｜#節電｜リモコン\n日｜お知らせ｜年末は混み合います。12月のご予約は11月中がおすすめです。｜｜\n祝｜Instagram｜祝日の営業のお知らせ｜｜";
+function show() {
+  const p = Hasshin.parse($("#src").value); store.set(KEY, $("#src").value);
+  $("#ng").innerHTML = p.ng.map(e => e.line + "行目：" + esc(e.why)).join("<br>");
+  $("#week").innerHTML = p.ok.map((x, i) => { const c = Hasshin.check(x); return `<div class="card"><h2>${x.day}曜日 <span class="tag">${esc(x.place)}</span><span class="muted">${c.chars}字</span></h2>
+    ${c.warn.map(w => `<p class="ng" style="margin:0">⚠ ${esc(w)}</p>`).join("")}<pre>${esc(Hasshin.copyText(x))}</pre>${x.photo ? `<p class="muted" style="margin:0">📷 ${esc(x.photo)}</p>` : ""}<button class="sub" data-i="${i}">コピー</button></div>`; }).join("");
+  $("#week").querySelectorAll("button").forEach(b => b.onclick = () => { navigator.clipboard && navigator.clipboard.writeText(Hasshin.copyText(p.ok[+b.dataset.i])); b.textContent = "コピーしました"; });
+}
+$("#src").value = store.get(KEY, SAMPLE); show();
+$("#go").onclick = show; $("#sample").onclick = () => { $("#src").value = SAMPLE; show(); }; $("#clear").onclick = () => { $("#src").value = ""; show(); };
+$("#t").onclick = () => { const p = Hasshin.parse(SAMPLE), tue = p.ok.find(x => x.day === "火"), fri = p.ok.find(x => x.day === "金"); runTests([
+  ["取り込めるのは7本、はじくのは1本（9行目・曜日がおかしい）", () => p.ok.length === 7 && p.ng.length === 1 && p.ng[0].line === 9],
+  ["月曜から日曜の順に並ぶ", () => p.ok.map(x => x.day).join("") === "月火水木金土日"],
+  ["火曜のXは152字で「12字オーバー」", () => Hasshin.check(tue).chars === 152 && Hasshin.check(tue).warn[0] === "Xは140字まで。12字オーバー"],
+  ["金曜はタグ11個で「多すぎ」", () => Hasshin.check(fri).warn[0] === "タグが11個。多すぎ（目安10個）"],
+  ["ほかの5本は注意なし", () => p.ok.filter(x => x !== tue && x !== fri).every(x => Hasshin.check(x).warn.length === 0)]], $("#tests")); };
+</script></body></html>

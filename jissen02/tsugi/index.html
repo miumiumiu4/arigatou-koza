@@ -1,0 +1,39 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>数字の次の一手（見本）</title><link rel="stylesheet" href="../common.css"></head><body><div class="wrap">
+<h1>📈 数字の次の一手</h1>
+<p class="muted">見本：架空のエアコンクリーニング店。先週と今週の数字（3つまで）から、くらべ3行と来週やること3つを出します。入れた内容はこのブラウザの中だけに残ります。</p>
+<div class="card"><h2>数字を入れる</h2>
+<p class="muted">1行に1つ：数字の名前,先週,今週,向き（増えるとよい／減るとよい）</p>
+<textarea id="src"></textarea>
+<button id="go">くらべる</button><button class="sub" id="sample">見本を入れる</button><button class="sub" id="clear">消す</button>
+<div id="ng" class="ng"></div></div>
+<div class="card"><h2>くらべ3行</h2><div id="cmp"></div></div>
+<div class="card"><h2>来週やること3つ</h2><table id="act"></table><button class="sub" id="copy">週報としてコピー</button></div>
+<div class="card"><h2>この道具に頼む「型」（見本）</h2><pre>毎週月曜の朝、先週の数字を入れて、くらべ3行と来週やること3つを教えて。1つ目は、いちばん悪くなった数字の手当てにして。</pre></div>
+<div class="card"><h2>テスト（架空のデータで計算が合うか）</h2><button class="sub" id="t">テストする</button><ul class="tests" id="tests"></ul></div>
+</div>
+<script src="logic.js"></script><script src="../testkit.js"></script><script>
+const $ = s => document.querySelector(s), KEY = "tsugi_v1";
+const SAMPLE = `数字の名前,先週,今週,向き
+売上,200000,170000,増えるとよい
+件数,10,12,増えるとよい
+問い合わせ,8,8,増えるとよい
+広告費,,5000,減るとよい`;
+let report = "";
+function show() {
+  const p = Tsugi.parse($("#src").value), c = Tsugi.compare(p.ok), a = Tsugi.nextActions(p.ok); store.set(KEY, $("#src").value);
+  $("#ng").innerHTML = p.ng.map(e => (e.line ? e.line + "行目：" : "") + esc(e.why)).join("<br>");
+  $("#cmp").innerHTML = c.map(x => `<p style="margin:4px 0" class="${x.score <= -10 ? "ng" : x.score >= 10 ? "ok" : ""}">${esc(x.line)}</p>`).join("") || '<p class="muted">数字を入れてください</p>';
+  $("#act").innerHTML = "<tr><th>やること</th><th>誰が</th><th>いつ</th><th>どの数字で確かめる</th></tr>" + a.map(x => `<tr><td>${esc(x.what)}</td><td>${x.who}</td><td>${x.when}</td><td>${esc(x.check)}</td></tr>`).join("");
+  report = "【今週のくらべ】\n" + c.map(x => x.line).join("\n") + "\n【来週やること】\n" + a.map((x, i) => (i + 1) + ". " + x.what + "（" + x.who + "・" + x.when + "・" + x.check + "）").join("\n");
+}
+$("#src").value = store.get(KEY, SAMPLE); show();
+$("#go").onclick = show; $("#sample").onclick = () => { $("#src").value = SAMPLE; show(); }; $("#clear").onclick = () => { $("#src").value = ""; show(); };
+$("#copy").onclick = e => { navigator.clipboard && navigator.clipboard.writeText(report); e.target.textContent = "コピーしました"; };
+$("#t").onclick = () => { const p = Tsugi.parse(SAMPLE), c = Tsugi.compare(p.ok), a = Tsugi.nextActions(p.ok); runTests([
+  ["取り込めるのは3件、はじくのは1件（5行目・数字がおかしい）", () => p.ok.length === 3 && p.ng.length === 1 && p.ng[0].line === 5],
+  ["売上：200,000 → 170,000（−15%）", () => c[0].line === "売上：200,000 → 170,000（−15%）"],
+  ["件数：10 → 12（+20%）／問い合わせ：8 → 8（±0%）", () => c[1].line === "件数：10 → 12（+20%）" && c[2].line === "問い合わせ：8 → 8（±0%）"],
+  ["来週やること：1つ目は売上（15%悪く）、2つ目は件数（20%良く）、3つ目は目標を1つ決める", () => /売上」が15%悪く/.test(a[0].what) && /件数」が20%良く/.test(a[1].what) && a[2].what === "来週の目標を1つ決める"],
+  ["減るとよい数字（経費 50,000 → 60,000）は「20%悪く」", () => /経費」が20%悪く/.test(Tsugi.nextActions([{ name: "経費", last: 50000, now: 60000, good: -1 }])[0].what)]], $("#tests")); };
+</script></body></html>

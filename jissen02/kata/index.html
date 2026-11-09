@@ -1,0 +1,33 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>型メーカーと型の棚（見本）</title><link rel="stylesheet" href="../common.css"></head><body><div class="wrap">
+<h1>🗂 型メーカーと型の棚</h1>
+<p class="muted">見本：架空のエアコンクリーニング店。MUSEが質問して作った「頼み方1枚（型）」を棚にしまい、探して、コピーして使います。入れた内容はこのブラウザの中だけに残ります。</p>
+<div class="card"><h2>型を作る（MUSEへの頼み方）</h2><pre>この仕事を任せたいです：（仕事の名前）
+型メーカーの手順で、私に質問を最大5つ、1回に1つずつしてください。
+答えがそろったら、「名前／目的／材料／手順／出来上がりの形／チェック項目／使う場面」の形で頼み方1枚にしてください。</pre></div>
+<div class="card"><h2>型を棚に入れる</h2>
+<p class="muted">MUSEが書いた型をそのまま貼ります。何枚かあるときは「---」の行で区切ります。</p>
+<textarea id="src"></textarea>
+<button id="go">棚に入れる</button><button class="sub" id="sample">見本を入れる</button><button class="sub" id="clear">消す</button></div>
+<div class="card"><h2>型の棚</h2><input id="q" placeholder="さがす（例：見積）" style="font:inherit;width:100%;padding:10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)"><div id="shelf"></div></div>
+<div class="card"><h2>テスト（架空のデータで読み取りが合うか）</h2><button class="sub" id="t">テストする</button><ul class="tests" id="tests"></ul></div>
+</div>
+<script src="logic.js"></script><script src="../testkit.js"></script><script>
+const $ = s => document.querySelector(s), KEY = "kata_v1";
+const SAMPLE = "名前：見積もりの返信\n目的：問い合わせから24時間以内に、感じよく見積もりを返す\n材料：お客様の文面、台数、エアコンの種類、料金表\n手順：1 台数と種類を確かめる\n2 料金表で合計を出す\n3 空いている日を3つ書く\n出来上がりの形：LINEにそのまま貼れる200字以内の返信文\nチェック項目：金額の計算が合っているか／日付と曜日がずれていないか\n使う場面：毎日の夕方、届いた問い合わせをまとめて返すとき\n---\n名前：口コミのお礼\n目的：口コミをくれたお客様に、名前入りでお礼を返す\n材料：口コミの文\n手順：口コミの中のうれしい言葉を1つ引用してお礼を書く\n出来上がりの形：\nチェック項目：お客様の名前の漢字が合っているか\n---\n名前：見積もりのお礼メール\n目的：見積もりを出した3日後に、迷っている人へひと声かける\n材料：見積もりを出した日、金額\n手順：売り込みにならない短い文にする\n出来上がりの形：100字以内のメール\nチェック項目：押しつけがましくないか\n";
+let cards = [];
+function show() {
+  cards = Kata.parseMany($("#src").value); store.set(KEY, $("#src").value);
+  const list = Kata.search(cards, $("#q").value);
+  $("#shelf").innerHTML = list.map(c => { const miss = Kata.missing(c), i = cards.indexOf(c); return `<div class="card" style="margin:10px 0"><h2>${esc(c["名前"] || "（名前なし）")} ${miss.length ? `<span class="ng" style="font-size:.85rem">足りない：${miss.join("・")}</span>` : '<span class="ok" style="font-size:.85rem">✓ そろっています</span>'}</h2>
+    ${Kata.KEYS.slice(1).filter(k => c[k]).map(k => `<p style="margin:2px 0"><b>${k}</b>：${esc(c[k]).replace(/\n/g, "<br>")}</p>`).join("")}<button class="sub" data-i="${i}">頼み方をコピー</button></div>`; }).join("") || '<p class="muted">型がまだありません</p>';
+  $("#shelf").querySelectorAll("button").forEach(b => b.onclick = () => { navigator.clipboard && navigator.clipboard.writeText(Kata.copyText(cards[+b.dataset.i])); b.textContent = "コピーしました"; });
+}
+$("#src").value = store.get(KEY, SAMPLE); show();
+$("#go").onclick = show; $("#q").oninput = show; $("#sample").onclick = () => { $("#src").value = SAMPLE; show(); }; $("#clear").onclick = () => { $("#src").value = ""; show(); };
+$("#t").onclick = () => { const c = Kata.parseMany(SAMPLE); runTests([
+  ["3枚読める（見積もりの返信・口コミのお礼・見積もりのお礼メール）", () => c.map(x => x["名前"]).join() === "見積もりの返信,口コミのお礼,見積もりのお礼メール"],
+  ["手順は3行のまま読める", () => c[0]["手順"].split("\n").length === 3],
+  ["「口コミのお礼」は「出来上がりの形」が足りない、ほかの2枚はそろっている", () => Kata.missing(c[1]).join() === "出来上がりの形" && !Kata.missing(c[0]).length && !Kata.missing(c[2]).length],
+  ["「見積」でさがすと2枚、「LINE」で1枚", () => Kata.search(c, "見積").length === 2 && Kata.search(c, "LINE").length === 1]], $("#tests")); };
+</script></body></html>

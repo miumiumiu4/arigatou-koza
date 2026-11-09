@@ -1,0 +1,13 @@
+:root{--bg:#fff8f2;--card:#fff;--ink:#33241c;--muted:#7d6d61;--line:#f0e2d6;--or:#e8590c;--soft:#fdeee2;--ok:#1f8a70;--ng:#b4532a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1714;--card:#2a221d;--ink:#f3e9e1;--muted:#b5a597;--line:#3d322b;--soft:#3a2a20}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",system-ui,sans-serif;line-height:1.7;font-size:16px}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 56px}h1{font-size:1.4rem;line-height:1.4;margin:.2em 0}h2{font-size:1.05rem;margin:0 0 8px}
+.muted{color:var(--muted);font-size:.88rem}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+textarea{font:inherit;width:100%;min-height:140px;padding:10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+button{font:inherit;font-weight:700;padding:10px 14px;border:0;border-radius:10px;background:var(--or);color:#fff;cursor:pointer;margin:6px 6px 0 0;min-height:44px}
+button.sub{background:var(--soft);color:var(--or)}.ok{color:var(--ok)}.ng{color:var(--ng)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}td.n,th.n{text-align:right;white-space:nowrap}
+.big{font-size:2rem;font-weight:800;color:var(--ok);line-height:1.2}.row{display:flex;gap:12px;flex-wrap:wrap}.row>.card{flex:1 1 200px;margin:0}
+.tag{display:inline-block;background:var(--soft);color:var(--or);border-radius:99px;padding:0 10px;font-size:.8rem;margin-right:6px}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;margin:6px 0;font:inherit}
+.tests li{list-style:none}.over{overflow-x:auto}

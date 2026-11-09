@@ -1,0 +1,11 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+const K = createRequire(import.meta.url)("./logic.js");
+const DATA = readFileSync(new URL("./sample.txt", import.meta.url), "utf8");
+test("3枚読める", () => { assert.deepEqual(K.parseMany(DATA).map(c => c["名前"]), ["見積もりの返信", "口コミのお礼", "見積もりのお礼メール"]); });
+test("手順は複数行のまま", () => { assert.equal(K.parseMany(DATA)[0]["手順"], "1 台数と種類を確かめる\n2 料金表で合計を出す\n3 空いている日を3つ書く"); });
+test("足りない項目", () => { const c = K.parseMany(DATA); assert.deepEqual(K.missing(c[0]), []); assert.deepEqual(K.missing(c[1]), ["出来上がりの形"]); assert.deepEqual(K.missing(c[2]), []); });
+test("検索", () => { const c = K.parseMany(DATA); assert.equal(K.search(c, "見積").length, 2); assert.equal(K.search(c, "LINE").length, 1); assert.equal(K.search(c, "").length, 3); });
+test("コピー用の文", () => { const t = K.copyText(K.parseMany(DATA)[2]); assert.ok(t.startsWith("次の頼み方で、この仕事をお願いします。\n【名前】見積もりのお礼メール")); assert.ok(!t.includes("【使う場面】")); });
